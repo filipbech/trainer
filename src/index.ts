@@ -1,1 +1,1 @@
-import "./elements/rubiks-app";
+import "./elements/trainer-app";

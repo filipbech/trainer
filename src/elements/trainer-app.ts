@@ -1,6 +1,9 @@
 import { LitElement, html, customElement, css } from "lit-element";
 import { bind, memoize } from 'decko';
 
+import './heart-rate/heart-rate';
+import './cadence-meter/cadence-meter';
+
 @customElement("trainer-app")
 export class TrainerAppElement extends LitElement {
     static styles = [css`
@@ -11,7 +14,10 @@ export class TrainerAppElement extends LitElement {
 
     render() {
         return html`
-            trainer here...
+            <heart-rate .bpm=${100}></heart-rate>
+
+            <cadence-meter .rpm=${70}></cadence-meter>
+
         `;
     }
 }
