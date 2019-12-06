@@ -21,7 +21,7 @@ export class CadenceMeterElement extends LitElement {
         transform-origin: 50% 50%;
         animation: circle infinite;
         animation-timing-function:linear;
-        animation-duration: var(--rpm, 1s);
+        animation-duration: var(--rpm, 0s);
     }
 
     #circle:before, #circle:after {
@@ -55,7 +55,7 @@ export class CadenceMeterElement extends LitElement {
     `];
 
     @property()
-    _rpm = 60;
+    _rpm = 0;
    
     set rpm(value:number) {
         this._rpm = value;

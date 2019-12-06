@@ -28,7 +28,7 @@ export class HeartRateElement extends LitElement {
         transform-origin: 50% 50%;
         animation: heartbeat infinite;
         animation-timing-function:linear;
-        animation-duration: var(--bpm, 1s);
+        animation-duration: var(--bpm, 0s);
     }
 
     #rate {
@@ -48,7 +48,7 @@ export class HeartRateElement extends LitElement {
     `];
 
     @property()
-    _bpm = 60;
+    _bpm = 0;
    
     set bpm(value:number) {
         this._bpm = value;

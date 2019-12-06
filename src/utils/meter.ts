@@ -32,7 +32,10 @@ let csc_measurement = [
 ];
 
 class BleCharacteristicParser {
-  getData(dataview) {
+  fields:any;
+  mask_size: any;
+
+  getData(dataview:any) {
     let offset = 0;
     let mask;
     if(this.mask_size === 16) {
@@ -60,7 +63,7 @@ class BleCharacteristicParser {
       }
     }
 
-    let data = {};
+    let data:any = {};
     for(let field of fieldArrangement) {
       var [[accessor, fieldSize, endianness], fieldName] = field;
       let value;
@@ -95,13 +98,16 @@ export class CyclingPowerMeasurementParser extends BleCharacteristicParser {
 }
 
 export class Meter {
+  listeners:any;
+  timeoutID:number|undefined;
+  milliTimeout:number;
   constructor () {
     this.listeners = {};
     this.timeoutID = undefined;
     this.milliTimeout = 8000;
   }
 
-  clearValueOnTimeout(value) {
+  clearValueOnTimeout(value:any) {
     if(this.timeoutID !== undefined) {
       clearTimeout(this.timeoutID);
     }
@@ -114,10 +120,10 @@ export class Meter {
       } else {
         this.dispatch(value, 0);
       }
-    }, this.milliTimeout);
+    }, this.milliTimeout) as unknown as number;
   }
 
-  addListener(type, callback) {
+  addListener(type:any, callback:any) {
     if(!(type in this.listeners)) {
       this.listeners[type] = [];
     }
@@ -125,7 +131,7 @@ export class Meter {
     this.listeners[type].push(callback);
   }
 
-  dispatch(type, value) {
+  dispatch(type:any, value:any) {
     if(!(type in this.listeners)) {
       this.listeners[type] = [];
     }
@@ -137,7 +143,17 @@ export class Meter {
 }
 
 export class BleMeter extends Meter {
-  constructor (device, server, service, characteristic) {
+  device:any;
+  server:any;
+  service:any;
+  characteristic:any;
+  name: string;
+  id:number;
+  listening:boolean;
+  serviceId:any;
+  characteristicId:number;
+  listen() {}
+  constructor (device:any, server:any, service:any, characteristic:any) {
     super();
 
     this.device = device;
@@ -150,7 +166,7 @@ export class BleMeter extends Meter {
 
     this.listening = false;
 
-    this.device.addEventListener('gattserverdisconnected', e => {
+    this.device.addEventListener('gattserverdisconnected', (e:any) => {
       this.gattserverdisconnected(e)
         .catch(error => {
           console.log("Error: ", error);
@@ -158,7 +174,7 @@ export class BleMeter extends Meter {
     });
   }
 
-  async gattserverdisconnected(e) {
+  async gattserverdisconnected(e:any) {
     console.log('Reconnecting');
     this.server = await this.device.gatt.connect();
     this.service = await this.server.getPrimaryService(this.serviceId);
@@ -171,22 +187,20 @@ export class BleMeter extends Meter {
 }
 
 export class BlePowerCadenceMeter extends BleMeter {
-  constructor (device, server, service, characteristic) {
+  parser = new CyclingPowerMeasurementParser();
+  lastCrankRevolutions = 0;
+  lastCrankTime = 0;
+  lastWheelRevolutions = 0;
+  lastWheelTime = 0;
+  constructor (device:any, server:any, service:any, characteristic:any) {
     super(device, server, service, characteristic);
-
     this.serviceId = 0x1818;
     this.characteristicId = 0x2A63;
-    this.parser = new CyclingPowerMeasurementParser();
-
-    this.lastCrankRevolutions = 0;
-    this.lastCrankTime = 0;
-    this.lastWheelRevolutions = 0;
-    this.lastWheelTime = 0;
   }
 
   listen() {
     if(!this.listening) {
-      this.characteristic.addEventListener('characteristicvaluechanged', event => {
+      this.characteristic.addEventListener('characteristicvaluechanged', (event:any) => {
         let data = this.parser.getData(event.target.value);
         let power = data['instantaneous_power'];
         let crankRevolutions = data['cumulative_crank_revolutions'];
@@ -248,17 +262,17 @@ export class BlePowerCadenceMeter extends BleMeter {
 }
 
 export class BlePowerMeter extends BleMeter {
-  constructor (device, server, service, characteristic) {
+  parser = new CyclingPowerMeasurementParser();
+  constructor (device:any, server:any, service:any, characteristic:any) {
     super(device, server, service, characteristic);
 
     this.serviceId = 0x1818;
     this.characteristicId = 0x2A63;
-    this.parser = new CyclingPowerMeasurementParser();
   }
 
   listen() {
     if(!this.listening) {
-      this.characteristic.addEventListener('characteristicvaluechanged', event => {
+      this.characteristic.addEventListener('characteristicvaluechanged', (event:any) => {
         let data = this.parser.getData(event.target.value);
         let power = data['instantaneous_power'];
         this.dispatch('power', power);
@@ -272,22 +286,21 @@ export class BlePowerMeter extends BleMeter {
 }
 
 export class BleCadenceMeter extends BleMeter  {
-  constructor (device, server, service, characteristic) {
+  parser = new CyclingSpeedCadenceMeasurementParser();
+  lastCrankRevolutions = 0;
+  lastCrankTime = 0;
+  lastWheelRevolutions = 0;
+  lastWheelTime = 0;
+  constructor (device:any, server:any, service:any, characteristic:any) {
     super(device, server, service, characteristic);
 
     this.serviceId = 0x1816;
     this.characteristicId = 0x2A5B;
-    this.parser = new CyclingSpeedCadenceMeasurementParser();
-
-    this.lastCrankRevolutions = 0;
-    this.lastCrankTime = 0;
-    this.lastWheelRevolutions = 0;
-    this.lastWheelTime = 0;
   }
 
   listen() {
     if(!this.listening) {
-      this.characteristic.addEventListener('characteristicvaluechanged', event => {
+      this.characteristic.addEventListener('characteristicvaluechanged', (event:any) => {
         let data = this.parser.getData(event.target.value);
         let crankRevolutions = data['cumulative_crank_revolutions'];
         let crankTime = data['last_crank_event_time'];
@@ -346,7 +359,7 @@ export class BleCadenceMeter extends BleMeter  {
 }
 
 export class BleHRMeter extends BleMeter {
-  constructor (device, server, service, characteristic) {
+  constructor (device:any, server:any, service:any, characteristic:any) {
     super(device, server, service, characteristic);
 
     this.serviceId = 0x180D;
@@ -355,7 +368,7 @@ export class BleHRMeter extends BleMeter {
 
   listen() {
     if(!this.listening) {
-      this.characteristic.addEventListener('characteristicvaluechanged', event => {
+      this.characteristic.addEventListener('characteristicvaluechanged', (event:any) => {
         let hr = event.target.value.getUint8(1);
         this.dispatch('hr', hr);
         this.clearValueOnTimeout('hr');
@@ -364,5 +377,4 @@ export class BleHRMeter extends BleMeter {
       this.listening = true;
     }
   }
-
 }

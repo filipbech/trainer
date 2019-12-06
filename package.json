@@ -36,6 +36,7 @@
         "webpack-dev-server": "^3.9.0"
     },
     "dependencies": {
+        "@types/web-bluetooth": "0.0.4",
         "@webcomponents/webcomponentsjs": "^2.1.1",
         "decko": "^1.2.0",
         "lit-element": "^2.1.0"
