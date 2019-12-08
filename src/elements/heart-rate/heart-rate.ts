@@ -30,6 +30,9 @@ export class HeartRateElement extends LitElement {
         animation-timing-function:linear;
         animation-duration: var(--bpm, 0s);
     }
+    path {
+        fill: var(--heartColor, #d52d2f);
+    }
 
     #rate {
         position:absolute;
@@ -58,9 +61,7 @@ export class HeartRateElement extends LitElement {
     render() {
         return html`
         <svg width="130" height="130">
-            <path
-                d="M 65,29 C 59,19 49,12 37,12 20,12 7,25 7,42 7,75 25,80 65,118 105,80 123,75 123,42 123,25 110,12 93,12 81,12 71,19 65,29 z"
-                fill="#ff0707"></path>
+            <path d="M 65,29 C 59,19 49,12 37,12 20,12 7,25 7,42 7,75 25,80 65,118 105,80 123,75 123,42 123,25 110,12 93,12 81,12 71,19 65,29 z"></path>
         </svg>
         <div id="rate">${this._bpm}<span>bpm</span></div>
           `

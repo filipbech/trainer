@@ -4,6 +4,7 @@
         "strict": true,
         "strictPropertyInitialization": false,
         "experimentalDecorators": true,
+        "noImplicitAny": false,
         "target": "es6",
         "moduleResolution": "node",
         "lib": [

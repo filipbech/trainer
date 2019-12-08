@@ -1,11 +1,13 @@
 import { CyclingPowerMeasurementParser, BlePowerCadenceMeter, BlePowerMeter, BleHRMeter } from './meter';
 import { readCharacteristicValue } from './read-characteristic-value';
 
-interface IMeters {
+export interface IMeters {
     powerMeter?: BlePowerMeter | BlePowerCadenceMeter;
     cadenceMeter?: BlePowerCadenceMeter;
     hrMeter?: BleHRMeter;
 }
+
+const meters: IMeters = {};
 
 export const connect = async () => {
     const device = await navigator.bluetooth.requestDevice({
@@ -18,8 +20,6 @@ export const connect = async () => {
         {services: [0x1816]}]
     });
     const server = await (device as any).gatt.connect();
-
-    const meters: IMeters = {};
 
     /**
      *  POWERMETER 

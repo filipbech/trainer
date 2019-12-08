@@ -1,50 +1,57 @@
-export const zones = [{
-    color: '#fff',
+export interface IZone {
+    color: string;
+    num: number;
+    maxFtp: number;
+}
+
+export const zones: IZone[] = [{
+    color: '#e4fc54',
     num: 1,
     maxFtp: 30
 },{
-    color: '#fff',
+    color: '#e4fc54',
     num: 2,
     maxFtp: 55
 },{
-    color: 'blue',
+    color: '#e4fc54',
     num: 3,
     maxFtp: 60
 },{
-    color: 'blue',
+    color: '#e4fc54',
     num: 4,
     maxFtp: 75
 },{
-    color: 'green',
+    color: '#eeb540',
     num: 5,
     maxFtp: 82
 },{
-    color: 'green',
+    color: '#eeb540',
     num: 6,
     maxFtp: 90
 },{
-    color: 'yellow',
+    color: '#eeb540',
     num: 7,
     maxFtp: 97
 },{
-    color: 'yellow',
+    color: '#d52d2f',
     num: 8,
     maxFtp: 105
 },{
-    color: 'red',
+    color: '#d52d2f',
     num: 9,
     maxFtp: 115
 },{
-    color: 'red',
+    color: '#d52d2f',
     num: 10,
     maxFtp: 999
 }];
 
-export const zoneFromWatt = (watt:number, ftp:number) => {
-    const pct = watt/ftp;
+export const zoneFromFtpPercent = (pct:number) => {
+    
     for (let zone of zones) {
         if(zone.maxFtp > pct) {
             return zone;
         }
     }
+    return zones[0];
 }

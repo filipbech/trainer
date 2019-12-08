@@ -51,6 +51,7 @@ class BleCharacteristicParser {
     // Contains required fields
     if(this.fields[0][0] === 0) {
       for(let fdesc of this.fields[0][1]) {
+        //@ts-ignore
         fieldArrangement.push(fdesc);
       }
     }
@@ -58,6 +59,7 @@ class BleCharacteristicParser {
     for(let [flag, fieldDescriptions] of this.fields) {
       if(mask & flag) {
         for(let fdesc of fieldDescriptions) {
+          //@ts-ignore
           fieldArrangement.push(fdesc);
         }
       }
@@ -65,6 +67,7 @@ class BleCharacteristicParser {
 
     let data:any = {};
     for(let field of fieldArrangement) {
+      //@ts-ignore
       var [[accessor, fieldSize, endianness], fieldName] = field;
       let value;
       if(endianness) {
