@@ -11,7 +11,7 @@ export class YoutubePlayerElement extends LitElement {
 
     static styles = [css`
         :host {
-            display:inline-block;
+            display:block;
         }
         #container {
             display:block;
@@ -41,7 +41,7 @@ export class YoutubePlayerElement extends LitElement {
                 videoId: videoId,
                 events: {
                     'onReady': () => {
-                        this.youtubeplayer.seekTo(60,true)
+                        this.youtubeplayer.seekTo(0,true)
                         this.youtubeplayer.playVideo();
                     },
                     'onStateChange': (state) => {

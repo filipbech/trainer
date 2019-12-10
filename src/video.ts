@@ -1,4 +1,4 @@
-{
+export const video = {
     "video":"bEfCKGBJc6k",
     "title":"Cadence Training With GCN | Over/Under Interval Workout On The Passo Sella",
     "startTime":2,

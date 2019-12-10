@@ -5,8 +5,11 @@ import './heart-rate/heart-rate';
 import './cadence-meter/cadence-meter';
 import './power-meter/power-meter';
 import './youtube-player/youtube-player';
+import './progress-bar/progress-bar';
 
 import { connect, IMeters } from '../utils/connect-sensors';
+
+import { video } from '../video';
 
 @customElement("trainer-app")
 export class TrainerAppElement extends LitElement {
@@ -20,6 +23,7 @@ export class TrainerAppElement extends LitElement {
             left:0;
             bottom:var(--zone-percent, 0%);
             transform:translateY(50%);
+            transition: bottom 0.5s;
         }
         power-meter:before {
             content:'';
@@ -47,50 +51,60 @@ export class TrainerAppElement extends LitElement {
         }
     `];
 
+    @property()
     cadence: number;
+
+    @property()
     power: number;
+
+    @property()
     hr: number;
+
+    @property()
+    seconds = 0;
 
     @bind
     connect() {
-        connect().then(meters => {
+        connect().then((meters:IMeters) => {
             if(typeof this.cadence === 'undefined' && meters.cadenceMeter) {
                 this.cadence = 0;
-                meters.cadenceMeter!.addListener('cadence', c=>{
+                meters.cadenceMeter!.addListener('cadence', c => {
                     this.cadence = c;
                 });
+                meters.cadenceMeter!.listen();
             }
 
             if(typeof this.power === 'undefined' && meters.powerMeter) {
                 this.power = 0;
-                meters.powerMeter!.addListener('power', c=>{
-                    this.power = c;
+                meters.powerMeter!.addListener('power', p => {
+                    this.power = p;
                 });
+                meters.powerMeter!.listen();
             }
 
             if(typeof this.hr === 'undefined' && meters.hrMeter) {
                 this.hr = 0;
-                meters.hrMeter!.addListener('hr', c=>{
-                    this.hr = c;
+                meters.hrMeter!.addListener('hr', h => {
+                    this.hr = h;
                 });
+                meters.hrMeter!.listen();
             }
         })
     }
 
     timeChanged(seconds: number) {
-        console.log('seconds', seconds)
+        this.seconds = seconds;
     }
     zoneChanged(zone: number) {
         this.style.setProperty('--zone-percent', 10+(10*zone)+'%');
-        console.log('zone', zone)
     }
-
 
     render() {
         return html`
 
             <div id="container">
                 <youtube-player .videoId=${'bEfCKGBJc6k'} @timeChanged=${e=>this.timeChanged(e.detail)}></youtube-player>
+                <progress-bar .sections=${video.sections} .seconds=${this.seconds-video.startTime}></progress-bar>
                 <div id="power-container">
                     <power-meter .watts=${this.power} .ftp=${250} @zoneChanged=${e=>this.zoneChanged(e.detail.zoneNum)}></power-meter>
                 </div>
