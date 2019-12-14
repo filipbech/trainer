@@ -294,6 +294,7 @@ export class BleCadenceMeter extends BleMeter  {
   lastCrankTime = 0;
   lastWheelRevolutions = 0;
   lastWheelTime = 0;
+  lastRpm = 0;
   constructor (device:any, server:any, service:any, characteristic:any) {
     super(device, server, service, characteristic);
 
@@ -322,13 +323,17 @@ export class BleCadenceMeter extends BleMeter  {
             let duration = (crankTime - this.lastCrankTime) / 1024;
             let rpm = 0;
             if(duration > 0) {
-                rpm = (revs / duration) * 60;
+                rpm = Math.round((revs / duration) * 60);
             }
 
             this.lastCrankRevolutions = crankRevolutions;
             this.lastCrankTime = crankTime;
-
-            this.dispatch('cadence', rpm);
+            
+            if(!(rpm === 0 && this.lastRpm !== 0)) {
+              // only dispatch 0 after two consecutive values (to avoid false negatives) 
+              this.dispatch('cadence', rpm);
+            }
+            this.lastRpm = rpm;
         }
 
         if(wheelRevolutions !== undefined && wheelTime !== undefined) {
