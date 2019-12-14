@@ -11,6 +11,22 @@ import { connect, IMeters } from '../utils/connect-sensors';
 
 import { video } from '../video';
 
+interface Settings {
+    temp: number; /** temperature (celsius) */
+    press: number; /** actual air pressure (millibars, i.e., hectopascals) */
+    dew: number; /** dew point (celsius) */
+    rp_wr: number; /** Rider Weight (kg) */
+    rp_wb: number; /** Bike Weight (kg) */
+    ep_g: number; /** Grade % */
+    rp_a: number; /**  Frontal area A(m2) */
+    rp_cd: number; /** Drag coefficient Cd */
+    rp_dtl:number; /** Drivetrain loss Lossdt (%) */
+    ep_crr: number; /** Coefficient of rolling resistance Crr */
+    ep_rho: number; /** Air density Rho (kg/m3) */
+    ftp: number; /** Functional Thresshold Power */
+}
+
+
 @customElement("trainer-app")
 export class TrainerAppElement extends LitElement {
     static styles = [css`

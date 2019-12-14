@@ -9,7 +9,7 @@
 //  temp = temperature (celsius)
 //  press = actual air pressure (millibars, i.e., hectopascals)
 //  dew = dew point (celsius)
-export function CalculateRho(temp:any, press:any, dew:any) {
+export function CalculateRho(temp:number, press:number, dew:number) {
     // Step 1: calculate the saturation water pressure at the dew point,
     // i.e., the vapor pressure in the air.  Use Herman Wobus' equation.
     var c0 = 0.99999683;

@@ -1,5 +1,7 @@
 // all credits for these files goes to: https://github.com/chadj/gpedal/
 
+
+
 let ble_sint16 = ['getInt16', 2, true];
 let ble_uint8 = ['getUint8', 1];
 let ble_uint16 = ['getUint16', 2, true];
@@ -126,7 +128,7 @@ export class Meter {
     }, this.milliTimeout) as unknown as number;
   }
 
-  addListener(type:any, callback:any) {
+  addListener(type:string, callback:() => void) {
     if(!(type in this.listeners)) {
       this.listeners[type] = [];
     }
@@ -134,7 +136,7 @@ export class Meter {
     this.listeners[type].push(callback);
   }
 
-  dispatch(type:any, value:any) {
+  dispatch(type:string, value:any) {
     if(!(type in this.listeners)) {
       this.listeners[type] = [];
     }
