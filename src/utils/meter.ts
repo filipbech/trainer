@@ -128,7 +128,7 @@ export class Meter {
     }, this.milliTimeout) as unknown as number;
   }
 
-  addListener(type:string, callback:() => void) {
+  addListener(type:string, callback:any) {
     if(!(type in this.listeners)) {
       this.listeners[type] = [];
     }
@@ -223,9 +223,10 @@ export class BlePowerCadenceMeter extends BleMeter {
 
         let revs = crankRevolutions - this.lastCrankRevolutions;
         let duration = (crankTime - this.lastCrankTime) / 1024;
-        let rpm = 0;
+
         if(duration > 0) {
-          rpm = (revs / duration) * 60;
+            const rpm = Math.round((revs / duration) * 60);
+            this.dispatch('cadence', rpm);
         }
 
         this.lastCrankRevolutions = crankRevolutions;
@@ -255,8 +256,8 @@ export class BlePowerCadenceMeter extends BleMeter {
         }
         /* End Wheel Calc */
 
+
         this.dispatch('power', power);
-        this.dispatch('cadence', rpm);
         this.clearValueOnTimeout(['power', 'cadence', 'wheelrpm']);
       });
       this.characteristic.startNotifications();
@@ -296,7 +297,6 @@ export class BleCadenceMeter extends BleMeter  {
   lastCrankTime = 0;
   lastWheelRevolutions = 0;
   lastWheelTime = 0;
-  lastRpm = 0;
   constructor (device:any, server:any, service:any, characteristic:any) {
     super(device, server, service, characteristic);
 
@@ -323,19 +323,13 @@ export class BleCadenceMeter extends BleMeter  {
 
             let revs = crankRevolutions - this.lastCrankRevolutions;
             let duration = (crankTime - this.lastCrankTime) / 1024;
-            let rpm = 0;
             if(duration > 0) {
-                rpm = Math.round((revs / duration) * 60);
+                const rpm = Math.round((revs / duration) * 60);
+                this.dispatch('cadence', rpm);
             }
 
             this.lastCrankRevolutions = crankRevolutions;
             this.lastCrankTime = crankTime;
-            
-            if(!(rpm === 0 && this.lastRpm !== 0)) {
-              // only dispatch 0 after two consecutive values (to avoid false negatives) 
-              this.dispatch('cadence', rpm);
-            }
-            this.lastRpm = rpm;
         }
 
         if(wheelRevolutions !== undefined && wheelTime !== undefined) {
