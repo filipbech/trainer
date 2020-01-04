@@ -26,19 +26,30 @@ export class YoutubePlayerElement extends LitElement {
             left:0;
             right:0;
         }
+        progress-bar {
+            position:absolute;
+            bottom:30px;
+            left:11px;
+            right:11px;
+            pointer-events:none;
+        }
     `]
 
     state: 'unstarted' | 'ended' | 'playing' | 'paused' | 'buffering' | 'video cued';
     youtubeplayer:any;
-    time:number;
 
     @property()
-    set videoId(videoId:string) {
+    time:number;
+
+    _video;
+    @property()
+    set video(video) {
+        this._video = video;
         ensureApi().then(_=> {
             this.youtubeplayer = new window['YT']!.Player(this.shadowRoot!.getElementById('player'), {
                 height: '100%',
                 width: '100%',
-                videoId: videoId,
+                videoId: video.video,
                 events: {
                     'onReady': () => {
                         this.youtubeplayer.seekTo(0,true)
@@ -57,6 +68,9 @@ export class YoutubePlayerElement extends LitElement {
             console.log('youtube api error', e)
         });
     }
+    get video() {
+        return this._video;
+    }
 
     @bind
     updateTime() {
@@ -69,6 +83,9 @@ export class YoutubePlayerElement extends LitElement {
     }
 
     render() {
-        return html`<div id="container"><div id="player"></div></div>`
+        return html`<div id="container">
+            <div id="player"></div>
+            <progress-bar .sections=${this.video.sections} .seconds=${this.time-this.video.startTime}></progress-bar>
+        </div>`
     }
 }

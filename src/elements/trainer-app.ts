@@ -6,10 +6,11 @@ import './cadence-meter/cadence-meter';
 import './power-meter/power-meter';
 import './youtube-player/youtube-player';
 import './progress-bar/progress-bar';
+import './power-gauge/power-gauge';
+import './video-selector/video-selector';
 
 import { connect, IMeters } from '../utils/connect-sensors';
-
-import { video } from '../video';
+import { IZone, zoneAndScoreFromFtpPercent, zones } from "../utils/zones";
 
 interface Settings {
     temp: number; /** temperature (celsius) */
@@ -68,16 +69,37 @@ export class TrainerAppElement extends LitElement {
     `];
 
     @property()
-    cadence: number;
+    video;
+
+    @property() 
+    ftp = 220;
 
     @property()
-    power: number;
+    cadence: number;
+    
+
+    _power: number;
+    set power(v) {
+        this._power = v;
+        this.ftpPercent = (this.power/this.ftp)*100;
+        const zoneAndScore = zoneAndScoreFromFtpPercent(this.ftpPercent);
+        
+        this.zone = zoneAndScore.zone;
+        this.scorePct = zoneAndScore.scorePct
+        this.requestUpdate();
+    }
+    get power(): number {
+        return this._power
+    }
 
     @property()
     hr: number;
 
-    @property()
-    seconds = 0;
+    @property() 
+    scorePct = 0;
+
+    ftpPercent: number;
+    zone: IZone;
 
     @bind
     connect() {
@@ -108,34 +130,44 @@ export class TrainerAppElement extends LitElement {
         })
     }
 
-    timeChanged(seconds: number) {
-        this.seconds = seconds;
+    @bind
+    selectVideo(e) {
+        this.video = e.detail;
     }
-    zoneChanged(zone: number) {
-        this.style.setProperty('--zone-percent', 10+(10*zone)+'%');
+
+    videoStateChanged(state) {
+        if(state === 'ended') {
+            this.video = null;
+        }
     }
 
     render() {
         return html`
+        <button @click=${this.connect}>Connect a(nother) sensor</button>      
 
-            <div id="container">
-                <youtube-player .videoId=${'bEfCKGBJc6k'} @timeChanged=${e=>this.timeChanged(e.detail)}></youtube-player>
-                <progress-bar .sections=${video.sections} .seconds=${this.seconds-video.startTime}></progress-bar>
-                <div id="power-container">
-                    <power-meter .watts=${this.power} .ftp=${250} @zoneChanged=${e=>this.zoneChanged(e.detail.zoneNum)}></power-meter>
-                </div>
-            </div>
+        ${
+            typeof this.hr === 'number' 
+                ? html`<heart-rate .bpm=${this.hr}></heart-rate>`
+                : null
+        }
+        ${
+            typeof this.power === 'number' 
+                ? html`<power-gauge .watts=${this.power} .ftp=${this.ftp} .pct=${this.scorePct}></power-gauge>`
+                : null
+        }
+        ${
+            typeof this.cadence === 'number' 
+                ? html`<cadence-meter .rpm=${this.cadence}></cadence-meter>`
+                : null
+        }
 
-            <br/><br/>
-            <button @click=${this.connect}>Connect</button>
-
-            connected: HR ${typeof this.hr === 'number'   ? `👍`: `👎` }, power ${typeof this.power === 'number' ? `👍`: `👎` }, cadence ${typeof this.cadence === 'number' ? `👍`: `👎` }
-
-
-            <heart-rate .bpm=${this.hr}></heart-rate>
-
-            <cadence-meter .rpm=${this.cadence}></cadence-meter>
-
+        ${
+            !this.video 
+                ? html`<video-selector @videoSelected=${this.selectVideo}></video-selector>`
+                : html`
+                    <youtube-player .video=${this.video} @stateChanged=${e=>this.videoStateChanged(e.detail)}></youtube-player>
+                `
+        }
         `;
     }
 }

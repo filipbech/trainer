@@ -18,7 +18,7 @@ export class ProgressBarElement extends LitElement {
             content:'';
             position:absolute;
             left:0;
-            bottom:-5px;
+            bottom:0px;
             height:5px;
             width:100%;
             transform-origin:0 0;
@@ -28,6 +28,7 @@ export class ProgressBarElement extends LitElement {
         .section {
             height:10px;
             border-right:1px solid #000;
+            box-sizing:border-box;
         }
 
     `];

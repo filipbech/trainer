@@ -5,45 +5,45 @@ export interface IZone {
 }
 
 export const zones: IZone[] = [{
-    color: '#e4fc54',
+    color: '#d9e4cd',
     num: 1,
     maxFtp: 30
 },{
-    color: '#e4fc54',
+    color: '#c4e4a5',
     num: 2,
     maxFtp: 55
 },{
-    color: '#e4fc54',
+    color: '#96df73',
     num: 3,
     maxFtp: 60
 },{
-    color: '#e4fc54',
+    color: '#70d551',
     num: 4,
     maxFtp: 75
 },{
-    color: '#eeb540',
+    color: '#fbde42',
     num: 5,
     maxFtp: 82
 },{
-    color: '#eeb540',
+    color: '#ffcb00',
     num: 6,
     maxFtp: 90
 },{
-    color: '#eeb540',
+    color: '#faba43',
     num: 7,
     maxFtp: 97
 },{
-    color: '#d52d2f',
+    color: '#e8503e',
     num: 8,
     maxFtp: 105
 },{
-    color: '#d52d2f',
+    color: '#cb3725',
     num: 9,
     maxFtp: 115
 },{
-    color: '#d52d2f',
+    color: '#aa2d2a',
     num: 10,
-    maxFtp: 999
+    maxFtp: 150
 }];
 
 export const zoneFromFtpPercent = (pct:number) => {
@@ -54,4 +54,25 @@ export const zoneFromFtpPercent = (pct:number) => {
         }
     }
     return zones[0];
+}
+
+export const zoneAndScoreFromFtpPercent = (pct:number) => {
+    let prevZone:any = {
+        maxFtp:0
+    }
+    for (let zone of zones) {
+        if(zone.maxFtp > pct) {
+            const zoneSize = zone.maxFtp - prevZone.maxFtp;
+            const zonePointScore = zoneSize - (zone.maxFtp - pct)
+
+            const zoneScore = (zonePointScore/zoneSize)*100;
+            const scorePct = (zones.indexOf(zone)*10) + Math.floor(zoneScore/10);
+
+            return { zone, scorePct };
+        }
+        prevZone = zone;
+    }
+
+    // you are above the highest
+    return { zone: prevZone, scorePct:100 }
 }

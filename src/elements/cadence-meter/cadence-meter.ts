@@ -32,7 +32,7 @@ export class CadenceMeterElement extends LitElement {
         position:absolute;
         left:50%;
         transform:translateX(-50%);
-        background:#000;
+        background:currentColor;
     }
     #circle:after {
         bottom:0;

@@ -1,10 +1,13 @@
-import { LitElement, svg, html, customElement, css } from "lit-element";
-import { zoneFromFtpPercent, IZone, zones } from '../../utils/zones';
+import { LitElement, html, customElement, css, unsafeCSS } from "lit-element";
+import { IZone, zones } from '../../utils/zones';
 
 @customElement('power-gauge')
 export class PowerGaugeElement extends LitElement {
 
     static styles = [css`
+    :host{
+      display:inline-block;
+    }
     .wheel {
       overflow: hidden;
       width: 260px;
@@ -37,12 +40,14 @@ export class PowerGaugeElement extends LitElement {
       border-top-left-radius: 100%;
       border-top-right-radius: 5px;
       position: absolute;
-      bottom: 4px;
+      bottom: 0px;
       left: 20px;
-      transform-origin: 220% 4px;
+      transform-origin: 220% 0px;
       box-shadow: 0 2px 2px 1px rgba(0, 0, 0, .38);
       transition: transform 0.5s;
       z-index:11;
+      transform: var(--degrees);
+      will-change: transform;
     }
 
     .umbrella {
@@ -68,61 +73,61 @@ export class PowerGaugeElement extends LitElement {
     }
     
     .color:nth-child(1):after {
-      background-color: #9ED110;
+      background-color: ${unsafeCSS(zones[0].color)};
       transform: rotate(18deg);
       z-index: 10;
     }
     
     .color:nth-child(2):after {
-      background-color: #50B517;
+      background-color: ${unsafeCSS(zones[1].color)};
       transform: rotate(36deg);
       z-index: 9;
     }
     
     .color:nth-child(3):after {
-      background-color: #179067;
+      background-color: ${unsafeCSS(zones[2].color)};
       transform: rotate(54deg);
       z-index: 8;
     }
     
     .color:nth-child(4):after {
-      background-color: #476EAF;
+      background-color: ${unsafeCSS(zones[3].color)};
       transform: rotate(72deg);
       z-index: 7;
     }
     
     .color:nth-child(5):after {
-      background-color: #9f49ac;
+      background-color: ${unsafeCSS(zones[4].color)};
       transform: rotate(90deg);
       z-index: 6;
     }
     
     .color:nth-child(6):after {
-      background-color: #CC42A2;
+      background-color: ${unsafeCSS(zones[5].color)};
       transform: rotate(108deg);
       z-index: 5;
     }
     
     .color:nth-child(7):after {
-      background-color: #FF3BA7;
+      background-color: ${unsafeCSS(zones[6].color)};
       transform: rotate(126deg);
       z-index: 4;
     }
     
     .color:nth-child(8):after {
-      background-color: #FF5800;
+      background-color: ${unsafeCSS(zones[7].color)};
       transform: rotate(144deg);
       z-index: 3;
     }
     
     .color:nth-child(9):after {
-      background-color: #FF8100;
+      background-color: ${unsafeCSS(zones[8].color)};
       transform: rotate(162deg);
       z-index: 2;
     }
     
     .color:nth-child(10):after {
-      background-color: #FEAC00;
+      background-color: ${unsafeCSS(zones[9].color)};
       transform: rotate(180deg);
       z-index: 1;
     }
@@ -130,41 +135,35 @@ export class PowerGaugeElement extends LitElement {
 
     `];
 
+    _pct;
+    set pct(v) {
+      this._pct = v;
+      this.style.setProperty('--degrees', `rotate(${v*1.8}deg)`);
+    }
+    get pct() {
+      return this._pct;
+    }
+
     _watts:number;
     _ftp:number;
     zone: IZone;
     ftpPercent: number;
     set watts(value: number) {
         this._watts = value;   
-        this.sideEffects();
         this.requestUpdate();
     };
     get watts() {
-      return 250;
         return this._watts;
     }
 
     set ftp(value:number) {
         this._ftp = value;
-        this.sideEffects();
         this.requestUpdate();
     }
     get ftp() {
         return this._ftp;
     }
 
-    sideEffects() {
-        if (this._watts && this._ftp) {
-            this.ftpPercent = (this._watts/this._ftp)*100;
-            this.dispatchEvent(new CustomEvent('ftpPercentChanged', { detail: this.ftpPercent }))
-            const zone = zoneFromFtpPercent(this.ftpPercent);
-            if(this.zone !== zone) {
-                this.zone = zone;
-                this.dispatchEvent(new CustomEvent('zoneChanged', { detail: { zone, zoneNum: zones.indexOf(zone)} }))
-            }
-            this.style.setProperty('--zoneColor', this.zone.color);
-        }
-    }
 
     render() {
         return html`        

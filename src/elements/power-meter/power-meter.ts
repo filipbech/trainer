@@ -1,6 +1,6 @@
 import { LitElement, customElement, property, html, css } from "lit-element";
 
-import { zoneFromFtpPercent, IZone, zones } from '../../utils/zones';
+import { zoneFromFtpPercent, IZone, zones, zoneAndScoreFromFtpPercent } from '../../utils/zones';
 
 @customElement('power-meter')
 export class PowerMeterElement extends LitElement {
@@ -57,10 +57,10 @@ export class PowerMeterElement extends LitElement {
         if (this._watts && this._ftp) {
             this.ftpPercent = (this._watts/this._ftp)*100;
             this.dispatchEvent(new CustomEvent('ftpPercentChanged', { detail: this.ftpPercent }))
-            const zone = zoneFromFtpPercent(this.ftpPercent);
-            if(this.zone !== zone) {
-                this.zone = zone;
-                this.dispatchEvent(new CustomEvent('zoneChanged', { detail: { zone, zoneNum: zones.indexOf(zone)} }))
+            const zone = zoneAndScoreFromFtpPercent(this.ftpPercent);
+            if(this.zone !== zone.zone) {
+                this.zone = zone.zone;
+                this.dispatchEvent(new CustomEvent('zoneChanged', { detail: { zone, zoneNum: zones.indexOf(zone.zone)} }))
             }
             this.style.setProperty('--zoneColor', this.zone.color);
         }
