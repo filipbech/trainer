@@ -1,4 +1,4 @@
-import { LitElement, html, customElement, css, unsafeCSS } from "lit-element";
+import { LitElement, html, customElement, css, unsafeCSS, property } from "lit-element";
 import { IZone, zones } from '../../utils/zones';
 
 @customElement('power-gauge')
@@ -27,8 +27,18 @@ export class PowerGaugeElement extends LitElement {
       font-size:36px;
       width:200px;
       height:200px;
-      line-height:140px;
+      line-height:130px;
       text-align:center;
+      font-weight:bold;
+    }
+
+    .ave {
+      font-size:20px;
+      position:absolute;
+      top:25px;
+      left:50%;
+      transform:translateX(-50%);
+      font-weight:normal;
     }
 
     .needle {
@@ -131,7 +141,6 @@ export class PowerGaugeElement extends LitElement {
       transform: rotate(180deg);
       z-index: 1;
     }
-    
 
     `];
 
@@ -143,6 +152,8 @@ export class PowerGaugeElement extends LitElement {
     get pct() {
       return this._pct;
     }
+
+    @property() avePower:number = 0;
 
     _watts:number;
     _ftp:number;
@@ -168,7 +179,7 @@ export class PowerGaugeElement extends LitElement {
     render() {
         return html`        
             <div class="wheel">
-                <div class="number">${this.watts}</div>
+                <div class="number">${this.watts} <br/><span class="ave">${this.avePower}</span></div>
                 <ul class="umbrella">
                     <li class="color"></li>
                     <li class="color"></li>
