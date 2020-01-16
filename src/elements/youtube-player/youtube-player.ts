@@ -74,12 +74,12 @@ export class YoutubePlayerElement extends LitElement {
 
     @bind
     updateTime() {
-        this.time = Math.round(this.youtubeplayer.getCurrentTime());
-        this.dispatchEvent(new CustomEvent('timeChanged', { detail: this.time } ));
         if(this.state === 'playing') {
             // update time again in 1s
             setTimeout(this.updateTime, 1000);
         }
+        this.time = Math.round(this.youtubeplayer.getCurrentTime());
+        this.dispatchEvent(new CustomEvent('timeChanged', { detail: this.time } ));
     }
 
     render() {
