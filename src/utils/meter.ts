@@ -192,6 +192,8 @@ export class BleMeter extends Meter {
 }
 
 export class BlePowerCadenceMeter extends BleMeter {
+  cadenceHistory:number[] = [];
+  powerHistory:number[] = [];
   parser = new CyclingPowerMeasurementParser();
   lastCrankRevolutions = 0;
   lastCrankTime = 0;
@@ -227,6 +229,14 @@ export class BlePowerCadenceMeter extends BleMeter {
         if(duration > 0) {
             const rpm = Math.round((revs / duration) * 60);
             this.dispatch('cadence', rpm);
+
+            this.cadenceHistory.push(rpm);
+            const cadenceHistoryLength = this.cadenceHistory.length;
+            if(cadenceHistoryLength % 5 === 0) {
+              // only calculate averages every 5 valuechanges
+              const aveCadence = this.cadenceHistory.reduce((a,b)=>a+b,0)/cadenceHistoryLength;
+              this.dispatch('aveCadence', Math.round(aveCadence));
+            }
         }
 
         this.lastCrankRevolutions = crankRevolutions;
@@ -258,6 +268,15 @@ export class BlePowerCadenceMeter extends BleMeter {
 
 
         this.dispatch('power', power);
+
+        this.powerHistory.push(power);
+        const powerHistoryLength = this.powerHistory.length;
+        if(powerHistoryLength % 5 === 0) {
+          // only calculate averages every 5 valuechanges
+          const avePower = this.powerHistory.reduce((a,b)=>a+b,0)/powerHistoryLength;
+          this.dispatch('avePower', Math.round(avePower));
+        }    
+
         this.clearValueOnTimeout(['power', 'cadence', 'wheelrpm']);
       });
       this.characteristic.startNotifications();
@@ -268,6 +287,7 @@ export class BlePowerCadenceMeter extends BleMeter {
 }
 
 export class BlePowerMeter extends BleMeter {
+  powerHistory:number[] = [];
   parser = new CyclingPowerMeasurementParser();
   constructor (device:any, server:any, service:any, characteristic:any) {
     super(device, server, service, characteristic);
@@ -282,6 +302,15 @@ export class BlePowerMeter extends BleMeter {
         let data = this.parser.getData(event.target.value);
         let power = data['instantaneous_power'];
         this.dispatch('power', power);
+
+        this.powerHistory.push(power);
+        const powerHistoryLength = this.powerHistory.length;
+        if(powerHistoryLength % 5 === 0) {
+          // only calculate averages every 5 valuechanges
+          const avePower = this.powerHistory.reduce((a,b)=>a+b,0)/powerHistoryLength;
+          this.dispatch('avePower', Math.round(avePower));
+        }        
+
         this.clearValueOnTimeout('power');
       });
       this.characteristic.startNotifications();
@@ -292,6 +321,7 @@ export class BlePowerMeter extends BleMeter {
 }
 
 export class BleCadenceMeter extends BleMeter  {
+  cadenceHistory: number[] = [];
   parser = new CyclingSpeedCadenceMeasurementParser();
   lastCrankRevolutions = 0;
   lastCrankTime = 0;
@@ -326,7 +356,16 @@ export class BleCadenceMeter extends BleMeter  {
             if(duration > 0) {
                 const rpm = Math.round((revs / duration) * 60);
                 this.dispatch('cadence', rpm);
-            }
+
+                this.cadenceHistory.push(rpm);
+                const cadenceHistoryLength = this.cadenceHistory.length;
+                if(cadenceHistoryLength % 5 === 0) {
+                  // only calculate averages every 5 valuechanges
+                  const aveCadence = this.cadenceHistory.reduce((a,b)=>a+b,0)/cadenceHistoryLength;
+                  this.dispatch('aveCadence', Math.round(aveCadence));
+                }
+
+              }
 
             this.lastCrankRevolutions = crankRevolutions;
             this.lastCrankTime = crankTime;
@@ -363,6 +402,7 @@ export class BleCadenceMeter extends BleMeter  {
 }
 
 export class BleHRMeter extends BleMeter {
+  hrHistory: number[] = [];
   constructor (device:any, server:any, service:any, characteristic:any) {
     super(device, server, service, characteristic);
 
@@ -375,6 +415,15 @@ export class BleHRMeter extends BleMeter {
       this.characteristic.addEventListener('characteristicvaluechanged', (event:any) => {
         let hr = event.target.value.getUint8(1);
         this.dispatch('hr', hr);
+
+        this.hrHistory.push(hr);
+        const hrHistoryLength = this.hrHistory.length;
+        if(hrHistoryLength % 5 === 0) {
+          // only calculate averages every 5 valuechanges
+          const aveHr = this.hrHistory.reduce((a,b)=>a+b,0)/hrHistoryLength;
+          this.dispatch('aveHr', Math.round(aveHr));
+        }  
+
         this.clearValueOnTimeout('hr');
       });
       this.characteristic.startNotifications();

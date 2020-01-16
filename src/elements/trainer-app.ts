@@ -77,6 +77,14 @@ export class TrainerAppElement extends LitElement {
     @property()
     cadence: number;
     
+    @property()
+    aveCadence: number;
+
+    @property()
+    avePower: number;
+    
+    @property()
+    aveHr: number;
 
     _power: number;
     set power(v) {
@@ -106,24 +114,33 @@ export class TrainerAppElement extends LitElement {
         connect().then((meters:IMeters) => {
             if(typeof this.cadence === 'undefined' && meters.cadenceMeter) {
                 this.cadence = 0;
-                meters.cadenceMeter!.addListener('cadence', c => {
-                    this.cadence = c;
+                meters.cadenceMeter!.addListener('cadence', cadence => {
+                    this.cadence = cadence;
+                });
+                meters.cadenceMeter!.addListener('aveCadence', aveCadence => {
+                    this.aveCadence = aveCadence;
                 });
                 meters.cadenceMeter!.listen();
             }
 
             if(typeof this.power === 'undefined' && meters.powerMeter) {
                 this.power = 0;
-                meters.powerMeter!.addListener('power', p => {
-                    this.power = p;
+                meters.powerMeter!.addListener('power', power => {
+                    this.power = power;
+                });
+                meters.powerMeter!.addListener('avePower', avePower => {
+                    this.avePower = avePower;
                 });
                 meters.powerMeter!.listen();
             }
 
             if(typeof this.hr === 'undefined' && meters.hrMeter) {
                 this.hr = 0;
-                meters.hrMeter!.addListener('hr', h => {
-                    this.hr = h;
+                meters.hrMeter!.addListener('hr', hr => {
+                    this.hr = hr;
+                });
+                meters.hrMeter!.addListener('aveHr', aveHr => {
+                    this.aveHr = aveHr;
                 });
                 meters.hrMeter!.listen();
             }
