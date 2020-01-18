@@ -8,10 +8,11 @@ import './youtube-player/youtube-player';
 import './progress-bar/progress-bar';
 import './power-gauge/power-gauge';
 import './video-selector/video-selector';
-import './speed-from-watts/speed-from-watts';
+import './speed-o-meter/speed-o-meter';
 
 import { connect, IMeters } from '../utils/connect-sensors';
-import { IZone, zoneAndScoreFromFtpPercent, zones } from "../utils/zones";
+import { IZone, zoneAndScoreFromFtpPercent } from "../utils/zones";
+import { speedFromPower, kmPrHourFromMetersPrSeconds } from "../utils/speed-from-power";
 
 interface Settings {
     temp: number; /** temperature (celsius) */
@@ -75,24 +76,41 @@ export class TrainerAppElement extends LitElement {
     @property() 
     ftp = 220;
 
+    rider = {
+        weight: 90
+    };
+
     @property()
     cadence: number;
     
     @property()
     aveCadence: number;
 
+    _avePower:number;
     @property()
-    avePower: number;
-    
+    set avePower(newValue) {
+        this._avePower = newValue;
+        this.aveSpeed = Math.round(speedFromPower(this.avePower, this.grade, 0, this.rider.weight)*10)/10;
+    }
+    get avePower() {
+        return this._avePower;
+    }
+
+    @property()
+    aveSpeed: number;
+
     @property()
     aveHr: number;
+
+    @property()
+    speed: number;
 
     _power: number;
     set power(v) {
         this._power = v;
         this.ftpPercent = (this.power/this.ftp)*100;
         const zoneAndScore = zoneAndScoreFromFtpPercent(this.ftpPercent);
-        
+        this.speed = Math.round(speedFromPower(this.power, this.grade, 0, this.rider.weight)*10)/10;
         this.zone = zoneAndScore.zone;
         this.scorePct = zoneAndScore.scorePct
         this.requestUpdate();
@@ -100,6 +118,9 @@ export class TrainerAppElement extends LitElement {
     get power(): number {
         return this._power
     }
+
+    @property()
+    grade = 0;
 
     @property()
     hr: number;
@@ -172,7 +193,7 @@ export class TrainerAppElement extends LitElement {
             typeof this.power === 'number' 
                 ? html`
                     <power-gauge .watts=${this.power} .ftp=${this.ftp} .pct=${this.scorePct} .avePower=${this.avePower}></power-gauge>
-                    <speed-from-watts .watts=${this.power} .aveWatts=${this.avePower}></speed-from-watts>
+                    <speed-o-meter .speed=${this.speed} .aveSpeed=${this.aveSpeed}></speed-o-meter>
                     `
                 : null
         }

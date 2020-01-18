@@ -22,6 +22,7 @@ Ideas / Things to consider
 Fixes
 - Black start/end of progress bar to align better
 - More/better design (need help here)
+- add memoize to calculations
 
 Infrastructure/tech
 - Pwa caching

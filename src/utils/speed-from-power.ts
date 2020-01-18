@@ -1,6 +1,8 @@
 import { CalculateVelocity } from './power-v-speed';
 import { CalculateRho } from './air-density';
 
+export const kmPrHourFromMetersPrSeconds = (mps) => mps*3.6;
+
 export const speedFromPower = (power:number, grade:number, elevation:number, weight:number) => {
     let temp = 23.8889;
     let pressure = Math.exp(-elevation / 7000) * 1000;
@@ -29,7 +31,6 @@ export const speedFromPower = (power:number, grade:number, elevation:number, wei
     // convert to m/s
     velocity = velocity * 0.277778;
 
-    return velocity;
+    return kmPrHourFromMetersPrSeconds(velocity);
   }
 
-  export const kmPrHourFromMetersPrSeconds = (mps) => mps*3.6;
