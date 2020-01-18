@@ -45,13 +45,16 @@ export class HeartRateElement extends LitElement {
     }
     #rate span {
         display:block;
-        font-size:12px;
+        font-size:15px;
     }
 
     `];
 
     @property()
     _bpm = 0;
+
+    @property()
+    aveBpm = 0;
    
     set bpm(value:number) {
         this._bpm = value;
@@ -63,7 +66,7 @@ export class HeartRateElement extends LitElement {
         <svg width="130" height="130">
             <path d="M 65,29 C 59,19 49,12 37,12 20,12 7,25 7,42 7,75 25,80 65,118 105,80 123,75 123,42 123,25 110,12 93,12 81,12 71,19 65,29 z"></path>
         </svg>
-        <div id="rate">${this._bpm}<span>bpm</span></div>
+        <div id="rate">${this._bpm}<span>${this.aveBpm}</span></div>
           `
     }
 

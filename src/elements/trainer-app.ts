@@ -8,6 +8,7 @@ import './youtube-player/youtube-player';
 import './progress-bar/progress-bar';
 import './power-gauge/power-gauge';
 import './video-selector/video-selector';
+import './speed-from-watts/speed-from-watts';
 
 import { connect, IMeters } from '../utils/connect-sensors';
 import { IZone, zoneAndScoreFromFtpPercent, zones } from "../utils/zones";
@@ -164,17 +165,20 @@ export class TrainerAppElement extends LitElement {
 
         ${
             typeof this.hr === 'number' 
-                ? html`<heart-rate .bpm=${this.hr}></heart-rate>`
+                ? html`<heart-rate .bpm=${this.hr} .aveBpm=${this.aveHr}></heart-rate>`
                 : null
         }
         ${
             typeof this.power === 'number' 
-                ? html`<power-gauge .watts=${this.power} .ftp=${this.ftp} .pct=${this.scorePct}></power-gauge>`
+                ? html`
+                    <power-gauge .watts=${this.power} .ftp=${this.ftp} .pct=${this.scorePct} .avePower=${this.avePower}></power-gauge>
+                    <speed-from-watts .watts=${this.power} .aveWatts=${this.avePower}></speed-from-watts>
+                    `
                 : null
         }
         ${
             typeof this.cadence === 'number' 
-                ? html`<cadence-meter .rpm=${this.cadence}></cadence-meter>`
+                ? html`<cadence-meter .rpm=${this.cadence} .aveRpm=${this.aveCadence}></cadence-meter>`
                 : null
         }
 

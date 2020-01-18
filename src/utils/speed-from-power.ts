@@ -31,3 +31,5 @@ export const speedFromPower = (power:number, grade:number, elevation:number, wei
 
     return velocity;
   }
+
+  export const kmPrHourFromMetersPrSeconds = (mps) => mps*3.6;
