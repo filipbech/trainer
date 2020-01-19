@@ -17,7 +17,8 @@ Ideas / Things to consider
 - Add other zones (the 7 zones instead of the 10)
 - Add optional aveGradient to rides, use to calculate speed (show warning when not 0%)
 - option to upload to strava?
-- make it easier to select the right ride (maybe save last selected as default)
+
+- ADD MORE VIDEOS...
 
 Fixes
 - More/better design (need help here)
