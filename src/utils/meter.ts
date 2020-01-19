@@ -227,9 +227,9 @@ export class BlePowerCadenceMeter extends BleMeter {
         let duration = (crankTime - this.lastCrankTime) / 1024;
 
         if(duration > 0) {
-            const rpm = Math.round((revs / duration) * 60);
+          const rpm = Math.round((revs / duration) * 60);
+          if(rpm < 300) {
             this.dispatch('cadence', rpm);
-
             this.cadenceHistory.push(rpm);
             const cadenceHistoryLength = this.cadenceHistory.length;
             if(cadenceHistoryLength % 5 === 0) {
@@ -237,6 +237,7 @@ export class BlePowerCadenceMeter extends BleMeter {
               const aveCadence = this.cadenceHistory.reduce((a,b)=>a+b,0)/cadenceHistoryLength;
               this.dispatch('aveCadence', Math.round(aveCadence));
             }
+          }
         }
 
         this.lastCrankRevolutions = crankRevolutions;
@@ -354,9 +355,9 @@ export class BleCadenceMeter extends BleMeter  {
             let revs = crankRevolutions - this.lastCrankRevolutions;
             let duration = (crankTime - this.lastCrankTime) / 1024;
             if(duration > 0) {
-                const rpm = Math.round((revs / duration) * 60);
+              const rpm = Math.round((revs / duration) * 60);
+              if(rpm < 300) {
                 this.dispatch('cadence', rpm);
-
                 this.cadenceHistory.push(rpm);
                 const cadenceHistoryLength = this.cadenceHistory.length;
                 if(cadenceHistoryLength % 5 === 0) {
@@ -364,8 +365,8 @@ export class BleCadenceMeter extends BleMeter  {
                   const aveCadence = this.cadenceHistory.reduce((a,b)=>a+b,0)/cadenceHistoryLength;
                   this.dispatch('aveCadence', Math.round(aveCadence));
                 }
-
               }
+            }
 
             this.lastCrankRevolutions = crankRevolutions;
             this.lastCrankTime = crankTime;
