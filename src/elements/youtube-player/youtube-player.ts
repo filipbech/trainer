@@ -54,6 +54,7 @@ export class YoutubePlayerElement extends LitElement {
                     'onReady': () => {
                         this.youtubeplayer.seekTo(0,true)
                         this.youtubeplayer.playVideo();
+                        this.video.length = this.youtubeplayer.getDuration();
                     },
                     'onStateChange': (state) => {
                         this.state = STATES[state.data+1];
@@ -85,7 +86,7 @@ export class YoutubePlayerElement extends LitElement {
     render() {
         return html`<div id="container">
             <div id="player"></div>
-            <progress-bar .sections=${this.video.sections} .seconds=${this.time-this.video.startTime}></progress-bar>
+            <progress-bar .sections=${this.video.sections} .seconds=${this.time} .startTime=${this.video.startTime} .length=${this.video.length}></progress-bar>
         </div>`
     }
 }
