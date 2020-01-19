@@ -2,6 +2,7 @@ import { LitElement, html, customElement } from "lit-element";
 import { bind } from "decko";
 import { videos } from '../../video';
 
+const STORAGEKEY = "videoSelected";
 @customElement('video-selector')
 export class VideoSelectorElement extends LitElement {
 
@@ -18,9 +19,16 @@ export class VideoSelectorElement extends LitElement {
         return this._videos;
     }
 
-    constructor() {
-        super();
-        this.videos = videos;
+    connectedCallback() {
+        super.connectedCallback();
+        const selected = localStorage.getItem(STORAGEKEY);
+        this.videos = videos.map(v=> {
+            if (v.video === selected) {
+                v["selected"] = true;
+            }
+            return v;
+        });
+        
     }
 
     @bind
@@ -29,6 +37,7 @@ export class VideoSelectorElement extends LitElement {
         const f = new FormData(e.target);
         const index:number = f.get('video') as any;
         const detail = this.videos[index];
+        localStorage.setItem(STORAGEKEY, detail.video);
         this.dispatchEvent(new CustomEvent('videoSelected', { detail }))
         return false;
     }
@@ -36,10 +45,10 @@ export class VideoSelectorElement extends LitElement {
     render() {
         return html`
         <form @submit=${this.onSubmit}>
-            <select name="video">
+            <select name="video" id="select">
                 ${
                     this.videos.map((video, index) => html`
-                        <option value=${index}>(${Math.floor(video.duration/60)} min) ${video.title}</option>
+                        <option value=${index} ?selected=${video.selected}>(${Math.floor((video.duration + 10 /** to make up for videos that start a couple seconds to late */)/60)} min) ${video.title}</option>
                     `)
                 }
             </select>
