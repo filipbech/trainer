@@ -27,8 +27,20 @@ export class ProgressBarElement extends LitElement {
         }
         .section {
             height:10px;
-            border-right:1px solid #000;
-            box-sizing:border-box;
+            position:relative;
+        }
+        .section:after {
+            content:'';
+            position:absolute;
+            right:0;
+            top:0;
+            bottom:0;
+            width:1px;
+            background:black;
+            display:block;
+        }
+        .section:last-child:after {
+            display:none;
         }
 
     `];
