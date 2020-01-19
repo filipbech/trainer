@@ -1394,5 +1394,85 @@ export const videos = [
         "cadence":90,
         "duration":90
     }]
+},{
+    "video":"Umrgux4acGQ",
+    "title":"Train With Team Sky | GCN's Aerobic Cadence Workout",
+    "startTime":0,
+    "sections": [{
+        "name":"warmup",
+        "effort":1,
+        "cadence":90,
+        "duration":59
+    },{
+        "name":"warmup",
+        "effort":2,
+        "cadence":90,
+        "duration":60
+    },{
+        "name":"warmup",
+        "effort":3,
+        "cadence":90,
+        "duration":60
+    },{
+        "name":"warmup",
+        "effort":4,
+        "cadence":90,
+        "duration":60
+    },{
+        "name":"warmup",
+        "effort":5,
+        "cadence":90,
+        "duration":60
+    },{
+        "name":"",
+        "effort":8,
+        "cadence":50,
+        "duration":300
+    },{
+        "name":"",
+        "effort":8,
+        "cadence":100,
+        "duration":300
+    },{
+        "name":"",
+        "effort":8,
+        "cadence":50,
+        "duration":300
+    },{
+        "name":"",
+        "effort":8,
+        "cadence":100,
+        "duration":280
+    },{
+        "name":"",
+        "effort":10,
+        "cadence":120,
+        "duration":20
+    },{
+        "name":"cool down",
+        "effort":5,
+        "cadence":90,
+        "duration":60
+    },{
+        "name":"cool down",
+        "effort":4,
+        "cadence":90,
+        "duration":60
+    },{
+        "name":"cool down",
+        "effort":3,
+        "cadence":90,
+        "duration":60
+    },{
+        "name":"cool down",
+        "effort":2,
+        "cadence":90,
+        "duration":60
+    },{
+        "name":"cool down",
+        "effort":1,
+        "cadence":90,
+        "duration":60
+    }]
 }
 ];
