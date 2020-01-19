@@ -33,19 +33,22 @@ export class ProgressBarElement extends LitElement {
 
     `];
 
-    totalTime = 0;
+    totalSectionTime = 0;
 
     set seconds(value: number) {
-        this.style.setProperty('--share', String(value / this.totalTime));
+        this.style.setProperty('--share', String(value / this.length));
         this.requestUpdate();
     }
 
+    @property() length: number;
+
+    @property() startTime: number = 0;
     
 
     _sections:any[];
     set sections(sections:any[]) {
         this._sections = sections;
-        this.totalTime = this.sections.reduce((acc, section) => acc+section.duration, 0);
+        this.totalSectionTime = this.sections.reduce((acc, section) => acc+section.duration, 0);
         this.requestUpdate();
     }
     get sections() {
@@ -56,6 +59,10 @@ export class ProgressBarElement extends LitElement {
     render() {
         return html`
             <div id="all">
+                <div class="section" style=${styleMap({
+                    backgroundColor: '#fff',
+                    flex: `1 1 ${this.startTime}%` 
+                })}></div>
                 ${
                     this.sections.map(section => html`
                         <div class="section" style=${styleMap({
@@ -64,6 +71,10 @@ export class ProgressBarElement extends LitElement {
                         })}></div>
                     `)
                 }
+                <div class="section" style=${styleMap({
+                    backgroundColor: '#fff',
+                    flex: `1 1 ${this.length-this.startTime-this.totalSectionTime}%` 
+                })}></div>
             </div>
         `;
     }
