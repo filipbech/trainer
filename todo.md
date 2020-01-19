@@ -20,9 +20,9 @@ Ideas / Things to consider
 - make it easier to select the right ride (maybe save last selected as default)
 
 Fixes
-- Black start/end of progress bar to align better
 - More/better design (need help here)
 - add memoize to calculations
+- sometimes progressbar dies, because this.youtubeplayer is undefined in youtube-player??
 
 Infrastructure/tech
 - Pwa caching
