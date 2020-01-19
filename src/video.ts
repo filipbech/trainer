@@ -1069,5 +1069,330 @@ export const videos = [
         "cadence":90,
         "duration":60
     }]
+},{
+    "video":"ybLM983BOCk",
+    "title":"HIIT Indoor Cycling Workout | 35 Minute Torque Power Intervals",
+    "startTime":3,
+    "sections": [{
+        "name":"warmup",
+        "effort":4,
+        "cadence":100,
+        "duration":360
+    }, {
+        "name":"max effort",
+        "effort":10,
+        "cadence":100,
+        "duration":40
+    },{
+        "name":"back off",
+        "effort":7,
+        "cadence":80,
+        "duration":20
+    },{
+        "name":"max effort",
+        "effort":10,
+        "cadence":100,
+        "duration":40
+    },{
+        "name":"back off",
+        "effort":7,
+        "cadence":80,
+        "duration":20
+    },{
+        "name":"max effort",
+        "effort":10,
+        "cadence":100,
+        "duration":40
+    },{
+        "name":"back off",
+        "effort":7,
+        "cadence":80,
+        "duration":20
+    },{
+        "name":"max effort",
+        "effort":10,
+        "cadence":100,
+        "duration":40
+    },{
+        "name":"back off",
+        "effort":7,
+        "cadence":80,
+        "duration":20
+    },{
+        "name":"max effort",
+        "effort":10,
+        "cadence":100,
+        "duration":40
+    },{
+        "name":"back off",
+        "effort":7,
+        "cadence":80,
+        "duration":20
+    },{
+        "name":"max effort",
+        "effort":10,
+        "cadence":100,
+        "duration":40
+    },{
+        "name":"back off",
+        "effort":7,
+        "cadence":80,
+        "duration":20
+    },{
+        "name":"max effort",
+        "effort":10,
+        "cadence":100,
+        "duration":40
+    },{
+        "name":"back off",
+        "effort":7,
+        "cadence":80,
+        "duration":20
+    },{
+        "name":"max effort",
+        "effort":10,
+        "cadence":100,
+        "duration":40
+    },{
+        "name":"back off",
+        "effort":7,
+        "cadence":80,
+        "duration":20
+    },{
+        "name":"recovery",
+        "effort":4,
+        "cadence":80,
+        "duration":180
+    },{
+        "name":"max effort",
+        "effort":10,
+        "cadence":100,
+        "duration":40
+    },{
+        "name":"back off",
+        "effort":7,
+        "cadence":80,
+        "duration":20
+    },{
+        "name":"max effort",
+        "effort":10,
+        "cadence":100,
+        "duration":40
+    },{
+        "name":"back off",
+        "effort":7,
+        "cadence":80,
+        "duration":20
+    },{
+        "name":"max effort",
+        "effort":10,
+        "cadence":100,
+        "duration":40
+    },{
+        "name":"back off",
+        "effort":7,
+        "cadence":80,
+        "duration":20
+    },{
+        "name":"max effort",
+        "effort":10,
+        "cadence":100,
+        "duration":40
+    },{
+        "name":"back off",
+        "effort":7,
+        "cadence":80,
+        "duration":20
+    },{
+        "name":"max effort",
+        "effort":10,
+        "cadence":100,
+        "duration":40
+    },{
+        "name":"back off",
+        "effort":7,
+        "cadence":80,
+        "duration":20
+    },{
+        "name":"max effort",
+        "effort":10,
+        "cadence":100,
+        "duration":40
+    },{
+        "name":"back off",
+        "effort":7,
+        "cadence":80,
+        "duration":20
+    },{
+        "name":"max effort",
+        "effort":10,
+        "cadence":100,
+        "duration":40
+    },{
+        "name":"back off",
+        "effort":7,
+        "cadence":80,
+        "duration":20
+    },{
+        "name":"max effort",
+        "effort":10,
+        "cadence":100,
+        "duration":40
+    },{
+        "name":"back off",
+        "effort":7,
+        "cadence":80,
+        "duration":20
+    },{
+        "name":"max effort",
+        "effort":10,
+        "cadence":100,
+        "duration":40
+    },{
+        "name":"back off",
+        "effort":7,
+        "cadence":80,
+        "duration":20
+    },{
+        "name":"max effort",
+        "effort":10,
+        "cadence":100,
+        "duration":40
+    },{
+        "name":"back off",
+        "effort":7,
+        "cadence":80,
+        "duration":20
+    },{
+        "name":"max effort",
+        "effort":10,
+        "cadence":100,
+        "duration":40
+    },{
+        "name":"back off",
+        "effort":7,
+        "cadence":80,
+        "duration":20
+    },{
+        "name":"max effort",
+        "effort":10,
+        "cadence":100,
+        "duration":40
+    },{
+        "name":"back off",
+        "effort":7,
+        "cadence":80,
+        "duration":20
+    },{
+        "name":"cool down",
+        "effort":4,
+        "cadence":80,
+        "duration":240
+    }]
+},{
+    "video":"UKenONcURLI",
+    "title":"30 Minute HIIT Fat Burn Workout | Train With Mitchelton-Scott",
+    "startTime":3,
+    "sections": [{
+        "name":"warmup",
+        "effort":2,
+        "cadence":90,
+        "duration":58
+    },{
+        "name":"warmup",
+        "effort":3,
+        "cadence":90,
+        "duration":120
+    },{
+        "name":"warmup",
+        "effort":5,
+        "cadence":90,
+        "duration":120
+    },{
+        "name":"",
+        "effort":7,
+        "cadence":90,
+        "duration":120
+    },{
+        "name":"",
+        "effort":8,
+        "cadence":90,
+        "duration":120
+    },{
+        "name":"",
+        "effort":10,
+        "cadence":110,
+        "duration":30
+    },{
+        "name":"",
+        "effort":8,
+        "cadence":90,
+        "duration":120
+    },{
+        "name":"",
+        "effort":10,
+        "cadence":110,
+        "duration":30
+    },{
+        "name":"",
+        "effort":5,
+        "cadence":90,
+        "duration":120
+    },{
+        "name":"",
+        "effort":8,
+        "cadence":90,
+        "duration":120
+    },{
+        "name":"",
+        "effort":10,
+        "cadence":110,
+        "duration":30
+    },{
+        "name":"",
+        "effort":8,
+        "cadence":90,
+        "duration":120
+    },{
+        "name":"",
+        "effort":10,
+        "cadence":110,
+        "duration":30
+    },{
+        "name":"",
+        "effort":5,
+        "cadence":90,
+        "duration":120
+    },{
+        "name":"",
+        "effort":8,
+        "cadence":90,
+        "duration":120
+    },{
+        "name":"",
+        "effort":10,
+        "cadence":110,
+        "duration":30
+    },{
+        "name":"",
+        "effort":8,
+        "cadence":90,
+        "duration":120
+    },{
+        "name":"",
+        "effort":10,
+        "cadence":110,
+        "duration":60
+    },{
+        "name":"cool down",
+        "effort":4,
+        "cadence":90,
+        "duration":120
+    },{
+        "name":"cool down",
+        "effort":2,
+        "cadence":90,
+        "duration":90
+    }]
 }
 ];
