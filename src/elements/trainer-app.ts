@@ -1,5 +1,8 @@
 import { LitElement, html, customElement, css, property } from "lit-element";
-import { bind, memoize } from 'decko';
+import { bind,  } from 'decko';
+import { connect, IMeters } from '../utils/connect-sensors';
+import { IZone, zoneAndScoreFromFtpPercent } from "../utils/zones";
+import { speedFromPower } from "../utils/speed-from-power";
 
 import './heart-rate/heart-rate';
 import './cadence-meter/cadence-meter';
@@ -9,10 +12,8 @@ import './progress-bar/progress-bar';
 import './power-gauge/power-gauge';
 import './video-selector/video-selector';
 import './speed-o-meter/speed-o-meter';
-
-import { connect, IMeters } from '../utils/connect-sensors';
-import { IZone, zoneAndScoreFromFtpPercent } from "../utils/zones";
-import { speedFromPower, kmPrHourFromMetersPrSeconds } from "../utils/speed-from-power";
+import './elapsed-time/elapsed-time'
+import { ElapsedTimeElement } from "./elapsed-time/elapsed-time";
 
 interface Settings {
     temp: number; /** temperature (celsius) */
@@ -178,11 +179,17 @@ export class TrainerAppElement extends LitElement {
         if(state === 'ended') {
             this.video = null;
         }
+        if(state === 'playing') {
+            const timer = this.shadowRoot && this.shadowRoot.getElementById('timer') as ElapsedTimeElement;
+            timer && timer.start();
+        }
     }
 
     render() {
         return html`
         <button @click=${this.connect}>Connect a(nother) sensor</button>      
+
+        <elapsed-time id="timer"></elapsed-time>
 
         ${
             typeof this.hr === 'number' 
