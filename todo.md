@@ -1,6 +1,5 @@
 # Todo / ideas
 
-- Time spend (show somewhere - start along with video)
 - Calories burnt
 - calculate distance
 
