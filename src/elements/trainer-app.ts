@@ -14,6 +14,7 @@ import './video-selector/video-selector';
 import './speed-o-meter/speed-o-meter';
 import './elapsed-time/elapsed-time'
 import { ElapsedTimeElement } from "./elapsed-time/elapsed-time";
+import "./show-distance/show-distance"
 
 interface Settings {
     temp: number; /** temperature (celsius) */
@@ -91,7 +92,7 @@ export class TrainerAppElement extends LitElement {
     @property()
     set avePower(newValue) {
         this._avePower = newValue;
-        this.aveSpeed = Math.round(speedFromPower(this.avePower, this.grade, 0, this.rider.weight)*10)/10;
+        this.aveSpeed = speedFromPower(this.avePower, this.grade, 0, this.rider.weight)
     }
     get avePower() {
         return this._avePower;
@@ -111,7 +112,7 @@ export class TrainerAppElement extends LitElement {
         this._power = v;
         this.ftpPercent = (this.power/this.ftp)*100;
         const zoneAndScore = zoneAndScoreFromFtpPercent(this.ftpPercent);
-        this.speed = Math.round(speedFromPower(this.power, this.grade, 0, this.rider.weight)*10)/10;
+        this.speed = speedFromPower(this.power, this.grade, 0, this.rider.weight);
         this.zone = zoneAndScore.zone;
         this.scorePct = zoneAndScore.scorePct
         this.requestUpdate();
@@ -129,9 +130,16 @@ export class TrainerAppElement extends LitElement {
     @property() 
     scorePct = 0;
 
+    state = {
+        running: true
+    };
+
     ftpPercent: number;
     zone: IZone;
 
+    @property()
+    time = 0;
+    
     @bind
     connect() {
         connect().then((meters:IMeters) => {
@@ -143,7 +151,7 @@ export class TrainerAppElement extends LitElement {
                 meters.cadenceMeter!.addListener('aveCadence', aveCadence => {
                     this.aveCadence = aveCadence;
                 });
-                meters.cadenceMeter!.listen();
+                meters.cadenceMeter!.listenWithState(this.state);
             }
 
             if(typeof this.power === 'undefined' && meters.powerMeter) {
@@ -154,7 +162,7 @@ export class TrainerAppElement extends LitElement {
                 meters.powerMeter!.addListener('avePower', avePower => {
                     this.avePower = avePower;
                 });
-                meters.powerMeter!.listen();
+                meters.powerMeter!.listenWithState(this.state);
             }
 
             if(typeof this.hr === 'undefined' && meters.hrMeter) {
@@ -165,10 +173,12 @@ export class TrainerAppElement extends LitElement {
                 meters.hrMeter!.addListener('aveHr', aveHr => {
                     this.aveHr = aveHr;
                 });
-                meters.hrMeter!.listen();
+                meters.hrMeter!.listenWithState(this.state);
             }
         })
     }
+
+    
 
     @bind
     selectVideo(e) {
@@ -185,11 +195,21 @@ export class TrainerAppElement extends LitElement {
         }
     }
 
+    @bind
+    playPause(running) {
+        this.state.running = running.detail;
+    }
+
+    @bind
+    updateTime(t) {
+        this.time = t.detail;
+    }
+
     render() {
         return html`
         <button @click=${this.connect}>Connect a(nother) sensor</button>      
 
-        <elapsed-time id="timer"></elapsed-time>
+        <elapsed-time id="timer" @playpause=${this.playPause} @time=${this.updateTime}></elapsed-time>
 
         ${
             typeof this.hr === 'number' 
@@ -201,6 +221,8 @@ export class TrainerAppElement extends LitElement {
                 ? html`
                     <power-gauge .watts=${this.power} .ftp=${this.ftp} .pct=${this.scorePct} .avePower=${this.avePower}></power-gauge>
                     <speed-o-meter .speed=${this.speed} .aveSpeed=${this.aveSpeed}></speed-o-meter>
+                    <show-distance .time=${this.time} .aveSpeed=${this.aveSpeed}></show-distance>
+
                     `
                 : null
         }

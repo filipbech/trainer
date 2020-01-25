@@ -33,6 +33,10 @@ let csc_measurement = [
   [2, [ [ble_uint16, 'cumulative_crank_revolutions'], [ble_uint16, 'last_crank_event_time'] ]]
 ];
 
+export interface IState {
+  running: boolean;
+}
+
 class BleCharacteristicParser {
   fields:any;
   mask_size: any;
@@ -199,10 +203,16 @@ export class BlePowerCadenceMeter extends BleMeter {
   lastCrankTime = 0;
   lastWheelRevolutions = 0;
   lastWheelTime = 0;
+  state: IState;
   constructor (device:any, server:any, service:any, characteristic:any) {
     super(device, server, service, characteristic);
     this.serviceId = 0x1818;
     this.characteristicId = 0x2A63;
+  }
+
+  listenWithState(state:IState) {
+    this.state = state;
+    this.listen();
   }
 
   listen() {
@@ -230,12 +240,15 @@ export class BlePowerCadenceMeter extends BleMeter {
           const rpm = Math.round((revs / duration) * 60);
           if(rpm < 300) {
             this.dispatch('cadence', rpm);
-            this.cadenceHistory.push(rpm);
-            const cadenceHistoryLength = this.cadenceHistory.length;
-            if(cadenceHistoryLength % 5 === 0) {
-              // only calculate averages every 5 valuechanges
-              const aveCadence = this.cadenceHistory.reduce((a,b)=>a+b,0)/cadenceHistoryLength;
-              this.dispatch('aveCadence', Math.round(aveCadence));
+
+            if(this.state.running) {
+              this.cadenceHistory.push(rpm);
+              const cadenceHistoryLength = this.cadenceHistory.length;
+              if(cadenceHistoryLength % 5 === 0) {
+                // only calculate averages every 5 valuechanges
+                const aveCadence = this.cadenceHistory.reduce((a,b)=>a+b,0)/cadenceHistoryLength;
+                this.dispatch('aveCadence', Math.round(aveCadence));
+              }
             }
           }
         }
@@ -288,6 +301,7 @@ export class BlePowerCadenceMeter extends BleMeter {
 }
 
 export class BlePowerMeter extends BleMeter {
+  state: IState;
   powerHistory:number[] = [];
   parser = new CyclingPowerMeasurementParser();
   constructor (device:any, server:any, service:any, characteristic:any) {
@@ -297,6 +311,11 @@ export class BlePowerMeter extends BleMeter {
     this.characteristicId = 0x2A63;
   }
 
+  listenWithState(state:IState) {
+    this.state = state;
+    this.listen();
+  }
+
   listen() {
     if(!this.listening) {
       this.characteristic.addEventListener('characteristicvaluechanged', (event:any) => {
@@ -304,13 +323,15 @@ export class BlePowerMeter extends BleMeter {
         let power = data['instantaneous_power'];
         this.dispatch('power', power);
 
-        this.powerHistory.push(power);
-        const powerHistoryLength = this.powerHistory.length;
-        if(powerHistoryLength % 5 === 0) {
-          // only calculate averages every 5 valuechanges
-          const avePower = this.powerHistory.reduce((a,b)=>a+b,0)/powerHistoryLength;
-          this.dispatch('avePower', Math.round(avePower));
-        }        
+        if(this.state.running) {
+          this.powerHistory.push(power);
+          const powerHistoryLength = this.powerHistory.length;
+          if(powerHistoryLength % 5 === 0) {
+            // only calculate averages every 5 valuechanges
+            const avePower = this.powerHistory.reduce((a,b)=>a+b,0)/powerHistoryLength;
+            this.dispatch('avePower', Math.round(avePower));
+          }        
+        }
 
         this.clearValueOnTimeout('power');
       });
@@ -328,11 +349,16 @@ export class BleCadenceMeter extends BleMeter  {
   lastCrankTime = 0;
   lastWheelRevolutions = 0;
   lastWheelTime = 0;
+  state: IState;
   constructor (device:any, server:any, service:any, characteristic:any) {
     super(device, server, service, characteristic);
 
     this.serviceId = 0x1816;
     this.characteristicId = 0x2A5B;
+  }
+  listenWithState(state:IState) {
+    this.state = state;
+    this.listen();
   }
 
   listen() {
@@ -358,12 +384,15 @@ export class BleCadenceMeter extends BleMeter  {
               const rpm = Math.round((revs / duration) * 60);
               if(rpm < 300) {
                 this.dispatch('cadence', rpm);
-                this.cadenceHistory.push(rpm);
-                const cadenceHistoryLength = this.cadenceHistory.length;
-                if(cadenceHistoryLength % 5 === 0) {
-                  // only calculate averages every 5 valuechanges
-                  const aveCadence = this.cadenceHistory.reduce((a,b)=>a+b,0)/cadenceHistoryLength;
-                  this.dispatch('aveCadence', Math.round(aveCadence));
+
+                if(this.state.running) {
+                  this.cadenceHistory.push(rpm);
+                  const cadenceHistoryLength = this.cadenceHistory.length;
+                  if(cadenceHistoryLength % 5 === 0) {
+                    // only calculate averages every 5 valuechanges
+                    const aveCadence = this.cadenceHistory.reduce((a,b)=>a+b,0)/cadenceHistoryLength;
+                    this.dispatch('aveCadence', Math.round(aveCadence));
+                  }
                 }
               }
             }
@@ -404,11 +433,17 @@ export class BleCadenceMeter extends BleMeter  {
 
 export class BleHRMeter extends BleMeter {
   hrHistory: number[] = [];
+  state: IState;
   constructor (device:any, server:any, service:any, characteristic:any) {
     super(device, server, service, characteristic);
 
     this.serviceId = 0x180D;
     this.characteristicId = 0x2A37;
+  }
+
+  listenWithState(state:IState) {
+    this.state = state;
+    this.listen();
   }
 
   listen() {
@@ -417,13 +452,15 @@ export class BleHRMeter extends BleMeter {
         let hr = event.target.value.getUint8(1);
         this.dispatch('hr', hr);
 
-        this.hrHistory.push(hr);
-        const hrHistoryLength = this.hrHistory.length;
-        if(hrHistoryLength % 5 === 0) {
-          // only calculate averages every 5 valuechanges
-          const aveHr = this.hrHistory.reduce((a,b)=>a+b,0)/hrHistoryLength;
-          this.dispatch('aveHr', Math.round(aveHr));
-        }  
+        if(this.state.running) {
+          this.hrHistory.push(hr);
+          const hrHistoryLength = this.hrHistory.length;
+          if(hrHistoryLength % 5 === 0) {
+            // only calculate averages every 5 valuechanges
+            const aveHr = this.hrHistory.reduce((a,b)=>a+b,0)/hrHistoryLength;
+            this.dispatch('aveHr', Math.round(aveHr));
+          } 
+        }
 
         this.clearValueOnTimeout('hr');
       });

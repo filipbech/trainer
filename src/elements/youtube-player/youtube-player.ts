@@ -36,7 +36,15 @@ export class YoutubePlayerElement extends LitElement {
     `]
 
     state: 'unstarted' | 'ended' | 'playing' | 'paused' | 'buffering' | 'video cued';
-    youtubeplayer:any;
+
+    _player;
+    set youtubeplayer(newVal) {
+        this._player = newVal;
+        debugger;
+    }
+    get youtubeplayer() {
+        return this._player;
+    }
 
     @property()
     time:number;

@@ -43,6 +43,7 @@ export class ElapsedTimeElement extends LitElement {
             return;
         }
         this.status = 'running';
+        this.dispatchEvent(new CustomEvent("playpause", { detail: this.status === 'running' }))
         if(this.elapsed) {
             this.startTime = new Date(new Date().getTime()-this.elapsed);
         } else {
@@ -54,6 +55,7 @@ export class ElapsedTimeElement extends LitElement {
     @bind
     stop() {
         this.status = 'paused';
+        this.dispatchEvent(new CustomEvent("playpause", { detail: this.status === 'running' }))
     }
 
     @bind
@@ -64,6 +66,7 @@ export class ElapsedTimeElement extends LitElement {
         const now = new Date();
         const diff = now.getTime()-this.startTime.getTime();
         this.elapsed = diff;
+        this.dispatchEvent(new CustomEvent("time", { detail: Math.floor(this.elapsed/1000) }))
         setTimeout(this.updateTimer, 100);
     }
 
