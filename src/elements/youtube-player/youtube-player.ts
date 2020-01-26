@@ -40,7 +40,6 @@ export class YoutubePlayerElement extends LitElement {
     _player;
     set youtubeplayer(newVal) {
         this._player = newVal;
-        debugger;
     }
     get youtubeplayer() {
         return this._player;
@@ -52,6 +51,9 @@ export class YoutubePlayerElement extends LitElement {
     _video;
     @property()
     set video(video) {
+        if (this._video === video) {
+            return;
+        }
         this._video = video;
         ensureApi().then(_=> {
             this.youtubeplayer = new window['YT']!.Player(this.shadowRoot!.getElementById('player'), {
