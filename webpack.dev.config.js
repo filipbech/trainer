@@ -2,6 +2,7 @@ const path = require("path");
 const autoprefixer = require("autoprefixer");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     mode: "development",
@@ -9,7 +10,7 @@ module.exports = {
     entry: "./src/index.ts",
     output: {
         path: path.join(__dirname, "dist/"),
-        filename: "js/main.js"
+        filename: "js/main.js",
     },
     resolve: {
         extensions: [".ts", ".js"]
@@ -21,7 +22,9 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: "src/index.html",
-        })
+        }),
+        new CopyWebpackPlugin([ { from: 'src/assets', to: 'assets' } ])
+
     ],
     module: {
         rules: [{
