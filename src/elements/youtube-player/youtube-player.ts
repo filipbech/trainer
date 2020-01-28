@@ -2,6 +2,7 @@ import { LitElement, html, customElement, css, property } from "lit-element";
 
 import { ensureApi } from './api';
 import { bind } from "decko";
+import { ISection, IVideo } from "../../video";
 
 
 const STATES: any[] = ['unstarted','ended','playing','paused','buffering','video cued'];
@@ -50,7 +51,7 @@ export class YoutubePlayerElement extends LitElement {
 
     _video;
     @property()
-    set video(video) {
+    set video(video: IVideo) {
         if (this._video === video) {
             return;
         }
@@ -91,6 +92,31 @@ export class YoutubePlayerElement extends LitElement {
         }
         this.time = Math.round(this.youtubeplayer.getCurrentTime());
         this.dispatchEvent(new CustomEvent('timeChanged', { detail: this.time } ));
+        this.updateSection();
+    }
+
+    section: ISection;
+    updateSection() {
+        let currentSection;
+        let timeleft = this.time - this.video.startTime;
+
+        if(timeleft > 0) {
+            for(let section of this.video.sections) {
+                if(timeleft > section.duration) {
+                    timeleft = timeleft-section.duration;
+                } else {
+                    currentSection = section;
+                    break;
+                }
+            }
+        } else {
+            currentSection = null;
+        }
+
+        if (currentSection !== this.section) {
+            this.dispatchEvent(new CustomEvent('sectionChange', { detail: currentSection }))
+            this.section = currentSection;
+        }
     }
 
     render() {

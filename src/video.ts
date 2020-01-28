@@ -1,3 +1,18 @@
+export interface ISection {
+    name: string;
+    effort: number;
+    cadence: number;
+    duration: number;
+}
+
+export interface IVideo {
+    video: string;
+    title: string;
+    startTime: number;
+    sections: ISection[];
+    length?: number;
+}
+
 export const videos = [
 {
     "video":"bEfCKGBJc6k",
@@ -1645,4 +1660,4 @@ export const videos = [
         "duration":180
     }]
 }
-];
+] as IVideo[];

@@ -15,6 +15,8 @@ import './speed-o-meter/speed-o-meter';
 import './elapsed-time/elapsed-time'
 import { ElapsedTimeElement } from "./elapsed-time/elapsed-time";
 import "./show-distance/show-distance"
+import './beep-metronome/beep-metronome';
+import { ISection } from "../video";
 
 interface Settings {
     temp: number; /** temperature (celsius) */
@@ -134,6 +136,18 @@ export class TrainerAppElement extends LitElement {
         running: true
     };
 
+    @property()
+    section: ISection;
+
+    @bind
+    sectionChanged(e) {
+        this.section = e.detail;
+    }
+
+    get bpm() {
+        return this.section ? this.section.cadence : null;
+    }
+
     ftpPercent: number;
     zone: IZone;
 
@@ -236,7 +250,8 @@ export class TrainerAppElement extends LitElement {
             !this.video 
                 ? html`<video-selector @videoSelected=${this.selectVideo}></video-selector>`
                 : html`
-                    <youtube-player .video=${this.video} @stateChanged=${e=>this.videoStateChanged(e.detail)}></youtube-player>
+                    <youtube-player .video=${this.video} @stateChanged=${e=>this.videoStateChanged(e.detail)} @sectionChange=${this.sectionChanged}></youtube-player>
+                    <beep-metronome .bpm=${this.bpm}></beep-metronome>
                 `
         }
         `;
