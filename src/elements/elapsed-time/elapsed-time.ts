@@ -1,32 +1,9 @@
 import { LitElement, html, property, customElement } from "lit-element";
 import { bind, memoize } from "decko";
+import { TimeFormat } from "../../utils/time-format";
 
 @customElement('elapsed-time')
 export class ElapsedTimeElement extends LitElement {
-    @memoize
-    static pad2(inp: string|number): string {
-        return String(inp).padStart(2, '0');
-    }
-
-    @memoize
-    static pad3(inp: string|number): string {
-        return String(inp).padStart(3, '0');
-    }
-
-    @memoize
-    static milisecondsToTime(miliseconds:number) {
-        const ts = Math.floor((miliseconds % 1000)/100);
-        const _sec = Math.floor(miliseconds/1000);
-        const sec = ElapsedTimeElement.pad2(_sec % 60);
-        const _min = Math.floor(miliseconds/(1000*60));
-        const min = ElapsedTimeElement.pad2(_min % 60);
-        const _hours = Math.floor(miliseconds/(1000*60*60));
-        const hours = ElapsedTimeElement.pad2(_hours % 60);
-
-        return {
-            ts, sec, min, hours
-        };
-    }
 
     @property()
     elapsed = 0;
@@ -75,13 +52,6 @@ export class ElapsedTimeElement extends LitElement {
         this.status = 'paused';
     }
 
-    @memoize
-    renderTime(ms: number) {
-        const time = ElapsedTimeElement.milisecondsToTime(ms);
-        return html`${time.hours}:${time.min}:${time.sec}:${time.ts}`;
-    }
-
-
     render() {
         return html`
             ${
@@ -90,7 +60,7 @@ export class ElapsedTimeElement extends LitElement {
                     : html`<button @click=${this.stop}>stop</button>`
             }<br/>
 
-            <div>${this.renderTime(this.elapsed)}</div>
+            <div>${TimeFormat.renderTime(this.elapsed, true)}</div>
         `;
     }
 }

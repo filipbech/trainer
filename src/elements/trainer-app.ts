@@ -17,6 +17,7 @@ import { ElapsedTimeElement } from "./elapsed-time/elapsed-time";
 import "./show-distance/show-distance"
 import './beep-metronome/beep-metronome';
 import { ISection } from "../video";
+import './current-section/current-section';
 
 interface Settings {
     temp: number; /** temperature (celsius) */
@@ -251,9 +252,9 @@ export class TrainerAppElement extends LitElement {
                 ? html`<video-selector @videoSelected=${this.selectVideo}></video-selector>`
                 : html`
                     <youtube-player .video=${this.video} @stateChanged=${e=>this.videoStateChanged(e.detail)} @sectionChange=${this.sectionChanged}></youtube-player>
-                    <beep-metronome .bpm=${this.bpm}></beep-metronome>
                 `
         }
+        <current-section .section=${this.section}></current-section>
         `;
     }
 }

@@ -1,4 +1,4 @@
-import { LitElement, html, property, customElement } from "lit-element";
+import { LitElement, html, customElement } from "lit-element";
 import { bind } from "decko";
 
 @customElement('beep-metronome')
@@ -52,18 +52,21 @@ export class BeepMetronomeElement extends LitElement {
     }
 
     connectedCallback() {
+        this.tick();
         super.connectedCallback();
+    }
+
+    constructor() {
+        super();
         this.ctx = new AudioContext();
         this.gainNode = this.ctx.createGain();
         this.gainNode.connect(this.ctx.destination);
         this.gainNode.gain.setValueAtTime(0.2, this.ctx.currentTime);
-        this.tick();
     }
 
     render() {
         return html`
-            Target Cadence: ${this.bpm}<br/>
-            <label>Beep <input type="checkbox" id="on" checked @change=${this.onChange} /></label>
+            <input type="checkbox" id="on" checked @change=${this.onChange} />
         `;
     }
 }
