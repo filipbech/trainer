@@ -30,10 +30,11 @@ export class CurrentSectionEement extends LitElement {
         return html`
             ${this.section && html`
                 <div style=${styleMap({ '--zone-color': this.zone ? this.zone.color : '' })}>
+                    <h4>${this.section.name}</h4>
                     Effort: ${this.section.effort}<br/>
                     ${this.section.cadence} <beep-metronome .bpm=${this.section.cadence}></beep-metronome><br/>
                     ${this.time}
-            </div>
+                </div>
             `}
         `;
     }

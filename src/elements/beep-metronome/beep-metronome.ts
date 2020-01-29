@@ -37,6 +37,7 @@ export class BeepMetronomeElement extends LitElement {
     onChange(e) {
         if(e.target.checked) {
             this.running = true;
+            clearTimeout(this.lastTimeout);
             this.tick();
         } else {
             this.running = false;
@@ -52,6 +53,7 @@ export class BeepMetronomeElement extends LitElement {
     }
 
     connectedCallback() {
+        clearTimeout(this.lastTimeout);
         this.tick();
         super.connectedCallback();
     }
@@ -61,7 +63,7 @@ export class BeepMetronomeElement extends LitElement {
         this.ctx = new AudioContext();
         this.gainNode = this.ctx.createGain();
         this.gainNode.connect(this.ctx.destination);
-        this.gainNode.gain.setValueAtTime(0.2, this.ctx.currentTime);
+        this.gainNode.gain.setValueAtTime(0.15, this.ctx.currentTime);
     }
 
     render() {
