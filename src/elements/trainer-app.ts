@@ -90,23 +90,23 @@ export class TrainerAppElement extends LitElement {
     cadence: number;
     
     @property()
-    aveCadence: number;
+    avgCadence: number;
 
-    _avePower:number;
+    _avgPower:number;
     @property()
-    set avePower(newValue) {
-        this._avePower = newValue;
-        this.aveSpeed = speedFromPower(this.avePower, this.grade, 0, this.rider.weight)
+    set avgPower(newValue) {
+        this._avgPower = newValue;
+        this.avgSpeed = speedFromPower(this.avgPower, this.grade, 0, this.rider.weight)
     }
-    get avePower() {
-        return this._avePower;
+    get avgPower() {
+        return this._avgPower;
     }
 
     @property()
-    aveSpeed: number;
+    avgSpeed: number;
 
     @property()
-    aveHr: number;
+    avgHr: number;
 
     @property()
     speed: number;
@@ -164,8 +164,8 @@ export class TrainerAppElement extends LitElement {
                 meters.cadenceMeter!.addListener('cadence', cadence => {
                     this.cadence = cadence;
                 });
-                meters.cadenceMeter!.addListener('aveCadence', aveCadence => {
-                    this.aveCadence = aveCadence;
+                meters.cadenceMeter!.addListener('avgCadence', avgCadence => {
+                    this.avgCadence = avgCadence;
                 });
                 meters.cadenceMeter!.listenWithState(this.state);
             }
@@ -175,8 +175,8 @@ export class TrainerAppElement extends LitElement {
                 meters.powerMeter!.addListener('power', power => {
                     this.power = power;
                 });
-                meters.powerMeter!.addListener('avePower', avePower => {
-                    this.avePower = avePower;
+                meters.powerMeter!.addListener('avgPower', avgPower => {
+                    this.avgPower = avgPower;
                 });
                 meters.powerMeter!.listenWithState(this.state);
             }
@@ -186,8 +186,8 @@ export class TrainerAppElement extends LitElement {
                 meters.hrMeter!.addListener('hr', hr => {
                     this.hr = hr;
                 });
-                meters.hrMeter!.addListener('aveHr', aveHr => {
-                    this.aveHr = aveHr;
+                meters.hrMeter!.addListener('avgHr', avgHr => {
+                    this.avgHr = avgHr;
                 });
                 meters.hrMeter!.listenWithState(this.state);
             }
@@ -229,22 +229,22 @@ export class TrainerAppElement extends LitElement {
 
         ${
             typeof this.hr === 'number' 
-                ? html`<heart-rate .bpm=${this.hr} .aveBpm=${this.aveHr}></heart-rate>`
+                ? html`<heart-rate .bpm=${this.hr} .avgBpm=${this.avgHr}></heart-rate>`
                 : null
         }
         ${
             typeof this.power === 'number' 
                 ? html`
-                    <power-gauge .watts=${this.power} .ftp=${this.ftp} .pct=${this.scorePct} .avePower=${this.avePower}></power-gauge>
-                    <speed-o-meter .speed=${this.speed} .aveSpeed=${this.aveSpeed}></speed-o-meter>
-                    <show-distance .time=${this.time} .aveSpeed=${this.aveSpeed}></show-distance>
+                    <power-gauge .watts=${this.power} .ftp=${this.ftp} .pct=${this.scorePct} .avgPower=${this.avgPower}></power-gauge>
+                    <speed-o-meter .speed=${this.speed} .avgSpeed=${this.avgSpeed}></speed-o-meter>
+                    <show-distance .time=${this.time} .avgSpeed=${this.avgSpeed}></show-distance>
 
                     `
                 : null
         }
         ${
             typeof this.cadence === 'number' 
-                ? html`<cadence-meter .rpm=${this.cadence} .aveRpm=${this.aveCadence}></cadence-meter>`
+                ? html`<cadence-meter .rpm=${this.cadence} .avgRpm=${this.avgCadence}></cadence-meter>`
                 : null
         }
 
@@ -256,7 +256,7 @@ export class TrainerAppElement extends LitElement {
                 `
         }
         <current-section .section=${this.section}></current-section>
-        <calories-burned .seconds=${this.time} .avePower=${this.avePower}></calories-burned>
+        <calories-burned .seconds=${this.time} .avgPower=${this.avgPower}></calories-burned>
         `;
     }
 }

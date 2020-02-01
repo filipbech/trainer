@@ -32,7 +32,7 @@ export class PowerGaugeElement extends LitElement {
       font-weight:bold;
     }
 
-    .ave {
+    .avg {
       font-size:20px;
       position:absolute;
       top:25px;
@@ -153,7 +153,7 @@ export class PowerGaugeElement extends LitElement {
       return this._pct;
     }
 
-    @property() avePower:number = 0;
+    @property() avgPower:number = 0;
 
     _watts:number;
     _ftp:number;
@@ -179,7 +179,7 @@ export class PowerGaugeElement extends LitElement {
     render() {
         return html`        
             <div class="wheel">
-                <div class="number">${this.watts} <br/><span class="ave">${this.avePower}</span></div>
+                <div class="number">${this.watts} <br/><span class="avg">${this.avgPower}</span></div>
                 <ul class="umbrella">
                     <li class="color"></li>
                     <li class="color"></li>

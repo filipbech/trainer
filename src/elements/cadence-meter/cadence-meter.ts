@@ -58,7 +58,7 @@ export class CadenceMeterElement extends LitElement {
     _rpm = 0;
     
     @property() 
-    aveRpm = 0;
+    avgRpm = 0;
 
 
     set rpm(value:number) {
@@ -69,7 +69,7 @@ export class CadenceMeterElement extends LitElement {
     render() {
         return html`
         <div id="circle"></div>
-        <div id="rate">${this._rpm}<span>${this.aveRpm}</span></div>
+        <div id="rate">${this._rpm}<span>${this.avgRpm}</span></div>
           `
     }
 

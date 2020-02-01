@@ -6,11 +6,11 @@ export class CaloriesBurnedElement extends LitElement {
     @property() 
     seconds = 0;
 
-    avePower = 0;
+    avgPower = 0;
 
     render() {
         return html`
-            Kcal: ${caloriesFromWattSeconds(this.avePower, this.seconds)}
+            Kcal: ${caloriesFromWattSeconds(this.avgPower, this.seconds)}
         `;
     }
 }

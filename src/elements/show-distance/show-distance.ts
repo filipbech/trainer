@@ -4,13 +4,13 @@ import { LitElement, html, property, customElement } from "lit-element";
 export class ShowDistanceElement extends LitElement {
 
     @property()
-    aveSpeed = 0; /** m/s */
+    avgSpeed = 0; /** m/s */
 
     @property()
     time = 0; /** seconds */
 
     calculateDistance() {
-        const distance = this.aveSpeed * this.time;
+        const distance = this.avgSpeed * this.time;
         return Math.round(distance/10)/100; 
     }
 

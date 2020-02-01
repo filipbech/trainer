@@ -246,8 +246,8 @@ export class BlePowerCadenceMeter extends BleMeter {
               const cadenceHistoryLength = this.cadenceHistory.length;
               if(cadenceHistoryLength % 5 === 0) {
                 // only calculate averages every 5 valuechanges
-                const aveCadence = this.cadenceHistory.reduce((a,b)=>a+b,0)/cadenceHistoryLength;
-                this.dispatch('aveCadence', Math.round(aveCadence));
+                const avgCadence = this.cadenceHistory.reduce((a,b)=>a+b,0)/cadenceHistoryLength;
+                this.dispatch('avgCadence', Math.round(avgCadence));
               }
             }
           }
@@ -287,8 +287,8 @@ export class BlePowerCadenceMeter extends BleMeter {
         const powerHistoryLength = this.powerHistory.length;
         if(powerHistoryLength % 5 === 0) {
           // only calculate averages every 5 valuechanges
-          const avePower = this.powerHistory.reduce((a,b)=>a+b,0)/powerHistoryLength;
-          this.dispatch('avePower', Math.round(avePower));
+          const avgPower = this.powerHistory.reduce((a,b)=>a+b,0)/powerHistoryLength;
+          this.dispatch('avgPower', Math.round(avgPower));
         }    
 
         this.clearValueOnTimeout(['power', 'cadence', 'wheelrpm']);
@@ -328,8 +328,8 @@ export class BlePowerMeter extends BleMeter {
           const powerHistoryLength = this.powerHistory.length;
           if(powerHistoryLength % 5 === 0) {
             // only calculate averages every 5 valuechanges
-            const avePower = this.powerHistory.reduce((a,b)=>a+b,0)/powerHistoryLength;
-            this.dispatch('avePower', Math.round(avePower));
+            const avgPower = this.powerHistory.reduce((a,b)=>a+b,0)/powerHistoryLength;
+            this.dispatch('avgPower', Math.round(avgPower));
           }        
         }
 
@@ -390,8 +390,8 @@ export class BleCadenceMeter extends BleMeter  {
                   const cadenceHistoryLength = this.cadenceHistory.length;
                   if(cadenceHistoryLength % 5 === 0) {
                     // only calculate averages every 5 valuechanges
-                    const aveCadence = this.cadenceHistory.reduce((a,b)=>a+b,0)/cadenceHistoryLength;
-                    this.dispatch('aveCadence', Math.round(aveCadence));
+                    const avgCadence = this.cadenceHistory.reduce((a,b)=>a+b,0)/cadenceHistoryLength;
+                    this.dispatch('avgCadence', Math.round(avgCadence));
                   }
                 }
               }
@@ -457,8 +457,8 @@ export class BleHRMeter extends BleMeter {
           const hrHistoryLength = this.hrHistory.length;
           if(hrHistoryLength % 5 === 0) {
             // only calculate averages every 5 valuechanges
-            const aveHr = this.hrHistory.reduce((a,b)=>a+b,0)/hrHistoryLength;
-            this.dispatch('aveHr', Math.round(aveHr));
+            const avgHr = this.hrHistory.reduce((a,b)=>a+b,0)/hrHistoryLength;
+            this.dispatch('avgHr', Math.round(avgHr));
           } 
         }
 

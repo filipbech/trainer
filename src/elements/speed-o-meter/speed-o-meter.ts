@@ -4,7 +4,7 @@ import { kmPrHourFromMetersPrSeconds } from "../../utils/speed-from-power";
 @customElement('speed-o-meter')
 export class SpeedFromWattsElement extends LitElement {
     @property() speed;
-    @property() aveSpeed;
+    @property() avgSpeed;
 
     static styles = [css`
         :host {
@@ -24,7 +24,7 @@ export class SpeedFromWattsElement extends LitElement {
     render() {
         return html`
             ${this.displaySpeed(this.speed)}Km/h
-            <span>${this.displaySpeed(this.aveSpeed)}km/h</span>
+            <span>${this.displaySpeed(this.avgSpeed)}km/h</span>
         `;
     }
 }
