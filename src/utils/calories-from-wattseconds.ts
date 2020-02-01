@@ -1,3 +1,3 @@
 export const caloriesFromWattSeconds = (avgWatt: number, seconds: number) => {
-    return 4 * ((avgWatt*seconds)/4186);
+    return Math.round(4 * ((avgWatt*seconds)/4186));
 }

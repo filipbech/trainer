@@ -18,6 +18,7 @@ import "./show-distance/show-distance"
 import './beep-metronome/beep-metronome';
 import { ISection } from "../video";
 import './current-section/current-section';
+import './calories-burned/calories-burned';
 
 interface Settings {
     temp: number; /** temperature (celsius) */
@@ -255,6 +256,7 @@ export class TrainerAppElement extends LitElement {
                 `
         }
         <current-section .section=${this.section}></current-section>
+        <calories-burned .seconds=${this.time} .avePower=${this.avePower}></calories-burned>
         `;
     }
 }
