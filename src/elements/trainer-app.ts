@@ -135,7 +135,7 @@ export class TrainerAppElement extends LitElement {
     scorePct = 0;
 
     state = {
-        running: true
+        running: false
     };
 
     @property()
@@ -214,6 +214,7 @@ export class TrainerAppElement extends LitElement {
     @bind
     playPause(running) {
         this.state.running = running.detail;
+        console.log(this.state);
     }
 
     @bind

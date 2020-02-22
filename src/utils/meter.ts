@@ -282,14 +282,15 @@ export class BlePowerCadenceMeter extends BleMeter {
 
 
         this.dispatch('power', power);
-
-        this.powerHistory.push(power);
-        const powerHistoryLength = this.powerHistory.length;
-        if(powerHistoryLength % 5 === 0) {
-          // only calculate averages every 5 valuechanges
-          const avgPower = this.powerHistory.reduce((a,b)=>a+b,0)/powerHistoryLength;
-          this.dispatch('avgPower', Math.round(avgPower));
-        }    
+        if(this.state.running) {
+          this.powerHistory.push(power);
+          const powerHistoryLength = this.powerHistory.length;
+          if(powerHistoryLength % 5 === 0) {
+            // only calculate averages every 5 valuechanges
+            const avgPower = this.powerHistory.reduce((a,b)=>a+b,0)/powerHistoryLength;
+            this.dispatch('avgPower', Math.round(avgPower));
+          }    
+        }
 
         this.clearValueOnTimeout(['power', 'cadence', 'wheelrpm']);
       });
